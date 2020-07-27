@@ -8,8 +8,7 @@ import { UserRepository } from './user.repository';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([TripRepository, UserRepository]),
-    // TypeOrmModule.forFeature([UserRepository]),
+    TypeOrmModule.forFeature([TripRepository, UserRepository]), //providing the entities
   ],
   controllers: [AuthController],
   providers: [AuthService],

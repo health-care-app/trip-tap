@@ -6,11 +6,14 @@ import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 @Controller('auth')
 export class AuthController {
   constructor(
+
     private authService: AuthService,
   ) { }
 
   @Post('/signup')
-  signUp(@Body() authCredentialsDto: AuthCredentialsDto): Promise<void> {
+  signUp(@Body() authCredentialsDto: AuthCredentialsDto): Promise<void> { //create username and password, call signUp method, and pass values.
+    console.log(authCredentialsDto);
     return this.authService.signUp(authCredentialsDto);
+
   }
 }
