@@ -3,9 +3,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { typeOrmConfig } from '@Config/typeorm.config';
 
+import { AuthModule } from './auth/auth.module';
+import { TripRepository } from './auth/trip.repository';
 import { TripsModule } from './trips/trips.module';
 import { TripsService } from './trips/trips.service';
-import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { AuthModule } from './auth/auth.module';
   ],
   providers: [
     TripsService,
+    TripRepository
   ],
 })
 export class AppModule {
