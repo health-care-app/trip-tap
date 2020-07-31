@@ -5,20 +5,18 @@ import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
+  public constructor(
 
-    private authService: AuthService,
+    private readonly authService: AuthService,
   ) { }
 
   @Post('/signup')
-  signUp(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto): Promise<void> { //create username and password, call signUp method, and pass values.
-    return this.authService.signUp(authCredentialsDto);// returning the call to the service.
+  public async signUp(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto): Promise<void> {
+    return this.authService.signUp(authCredentialsDto);
   }
 
   @Post('signin')
-  signIn(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto): Promise<{ accessToken: string }> {
+  public async signIn(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto): Promise<{ accessToken: string; }> {
     return this.authService.signIn(authCredentialsDto);
   }
-
-
 }

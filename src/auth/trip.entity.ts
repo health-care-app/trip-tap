@@ -5,14 +5,14 @@ import { User } from './user.entity';
 @Entity()
 export class Trip extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  public id: number;
 
   @Column()
-  name: string;
+  public name: string;
 
   @Column()
-  user: string;
+  public user: string;
 
   @ManyToOne(type => User, user => user.trips, { eager: false })
-  tuser: User;
+  public tuser: User;
 }

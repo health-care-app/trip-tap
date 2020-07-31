@@ -12,14 +12,13 @@ import { UserRepository } from './user.repository';
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt'}),
-    JwtModule.register({ // <-- this module exports a Service.
+    JwtModule.register({
       secret: 'topSecret51',
       signOptions: {
         expiresIn: 3600,
-      }
+      },
     }),
     TypeOrmModule.forFeature([TripRepository, UserRepository]),
-     //providing the entities, repositories should be available for injection throughout our module.
   ],
   controllers: [AuthController],
   providers: [

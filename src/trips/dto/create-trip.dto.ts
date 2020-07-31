@@ -2,8 +2,8 @@ import { IsNotEmpty } from 'class-validator';
 
 export class CreateTripDto {
   @IsNotEmpty()
-  name: string;
+  public name: string;
 
   @IsNotEmpty()
-  user: string;
+  public user: string;
 }

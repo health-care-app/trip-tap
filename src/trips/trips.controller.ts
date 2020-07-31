@@ -12,31 +12,31 @@ import { TripsService } from './trips.service';
 @UseGuards(AuthGuard())
 export class TripsController {
 
-  constructor(
+  public constructor(
     private readonly tripsService: TripsService,
   ) { }
 
   @Get()
-  getAllTrips(): Promise<Trip[]> {
+  public async getAllTrips(): Promise<Trip[]> {
     return this.tripsService.getAllTrips();
   }
 
   @Get('/:id')
-  getTripById(@Param('id', ParseIntPipe) id: number): Promise<Trip> {
-    return this.tripsService.getTripById(id)
+  public async getTripById(@Param('id', ParseIntPipe) id: number): Promise<Trip> {
+    return this.tripsService.getTripById(id);
   }
 
   @Post()
   @UsePipes(ValidationPipe)
-  createTrip(
+  public async createTrip(
     @Body() createTripDto: CreateTripDto,
-    @GetUser() tuser: User
+    @GetUser() tuser: User,
   ): Promise<Trip> {
     return this.tripsService.createTrip(createTripDto, tuser); // <-- passing values from the ui body request.
   }
 
   @Delete('/:id')
-  deleteTrip(@Param('id', ParseIntPipe) id: number): Promise<void> {
+  public async deleteTrip(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this.tripsService.deleteTrip(id);
   }
 }

@@ -7,22 +7,23 @@ import { Trip } from './trip.entity';
 @Unique(['username'])
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  public id: number;
 
   @Column()
-  username: string;
+  public username: string;
 
   @Column()
-  password: string;
+  public password: string;
 
   @Column()
-  salt: string;
+  public salt: string;
 
   @OneToMany(type => Trip, trip => trip.tuser, { eager: true })
-  trips: Trip[];
+  public trips: Trip[];
 
-  async validatePassword(password: string): Promise<boolean> {
-    const hash = await bcrypt.hash(password, this.salt);
+  public async validatePassword(password: string): Promise<boolean> {
+    const hash: string = await bcrypt.hash(password, this.salt);
+
     return (hash === this.password);
   }
 }
