@@ -1,3 +1,4 @@
+
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -17,13 +18,16 @@ export class TripsController {
   ) { }
 
   @Get()
-  public async getAllTrips(): Promise<Trip[]> {
-    return this.tripsService.getAllTrips();
+  public async getAllTrips(@GetUser() tuser: User): Promise<Trip[]> {
+    return this.tripsService.getAllTrips(tuser);
   }
 
   @Get('/:id')
-  public async getTripById(@Param('id', ParseIntPipe) id: number): Promise<Trip> {
-    return this.tripsService.getTripById(id);
+  public async getTripById(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() tuser: User,
+    ): Promise<Trip> {
+    return this.tripsService.getTripById(id, tuser);
   }
 
   @Post()
@@ -32,11 +36,14 @@ export class TripsController {
     @Body() createTripDto: CreateTripDto,
     @GetUser() tuser: User,
   ): Promise<Trip> {
-    return this.tripsService.createTrip(createTripDto, tuser); // <-- passing values from the ui body request.
+    return this.tripsService.createTrip(createTripDto, tuser);
   }
 
   @Delete('/:id')
-  public async deleteTrip(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.tripsService.deleteTrip(id);
+  public async deleteTrip(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() tuser: User,
+    ): Promise<void> {
+    return this.tripsService.deleteTrip(id, tuser);
   }
 }

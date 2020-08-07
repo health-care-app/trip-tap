@@ -16,7 +16,7 @@ import { TripsService } from './trips/trips.service';
   ],
   providers: [
     TripsService,
-    TripRepository
+    TripRepository,
   ],
 })
 export class AppModule {

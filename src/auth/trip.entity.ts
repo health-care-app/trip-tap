@@ -15,4 +15,7 @@ export class Trip extends BaseEntity {
 
   @ManyToOne(type => User, user => user.trips, { eager: false })
   public tuser: User;
+
+  @Column()
+  public tuserId: number;
 }

@@ -6,7 +6,6 @@ import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 @Controller('auth')
 export class AuthController {
   public constructor(
-
     private readonly authService: AuthService,
   ) { }
 
