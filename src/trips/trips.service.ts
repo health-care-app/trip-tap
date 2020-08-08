@@ -10,7 +10,6 @@ import { CreateTripDto } from './dto/create-trip.dto';
 
 @Injectable()
 export class TripsService {
-  // private readonly trips: Trip[] = [];
   public constructor(
 
     @InjectRepository(TripRepository)
@@ -27,7 +26,6 @@ export class TripsService {
     tuser: User,
   ): Promise<Trip> {
     const found: Trip = await this.tripRepository.findOne({ where: { id, tuserId: tuser.id } });
-
     if (!found) {
       throw new NotFoundException(`Trip with ID ${id} was not found.`);
     }

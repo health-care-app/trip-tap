@@ -11,7 +11,6 @@ import { TripsService } from './trips.service';
   imports: [
     AuthModule,
     TypeOrmModule.forFeature([TripRepository]),
-
   ],
   controllers: [TripsController],
   providers: [TripsService],
