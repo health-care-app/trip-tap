@@ -1,6 +1,6 @@
 import { Body, Controller, Post, Req, UseGuards, ValidationPipe } from '@nestjs/common';
 
-import { AccessToken } from '../token/accesstoken.interface';
+import { AccessToken } from '../token/access-token.interface';
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 
