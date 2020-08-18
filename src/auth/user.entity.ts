@@ -18,7 +18,7 @@ export class User extends BaseEntity {
   @Column()
   public salt: string;
 
-  @OneToMany(type => Trip, trip => trip.tuser, { eager: true })
+  @OneToMany(type => Trip, trip => trip.user, { eager: true })
   public trips: Trip[];
 
   public async validatePassword(password: string): Promise<boolean> {

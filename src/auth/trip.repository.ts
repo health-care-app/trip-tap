@@ -8,30 +8,29 @@ import { User } from './user.entity';
 @EntityRepository(Trip)
 export class TripRepository extends Repository<Trip>{
 
-  public async getAllTrips(tuser: User): Promise<Trip[]> {
+  public async getAllTrips(user: User): Promise<Trip[]> {
     const query = this.createQueryBuilder('trip');
 
-    query.where('trip.tuserId = :tuserId', { tuserId: tuser.id });
+    query.where('trip.userId = :userId', { userId: user.id });
 
     const trips: Trip[] = await query.getMany();
 
     return trips;
   }
 
-  public async createTrip(
+  public async  createTrip(
     createTripDto: CreateTripDto,
-    tuser: User,
+    user: User,
   ): Promise<Trip> {
-    const { name, user }: CreateTripDto = createTripDto;
+    const { name }: CreateTripDto = createTripDto;
 
     const trip = new Trip();
     trip.name = name;
     trip.user = user;
-    trip.tuser = tuser;
 
     await trip.save();
 
-    delete trip.tuser;
+    delete trip.user;
 
     return trip;
   }
