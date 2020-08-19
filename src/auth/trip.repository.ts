@@ -1,6 +1,4 @@
-import { userInfo } from 'os';
 import { EntityRepository, Repository } from 'typeorm';
-
 import { CreateTripDto } from '../trips/dto/create-trip.dto';
 import { Trip } from './trip.entity';
 import { User } from './user.entity';
