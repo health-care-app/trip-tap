@@ -1,31 +1,30 @@
 import { ConflictException, InternalServerErrorException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { EntityRepository, Repository } from 'typeorm';
-
-import { AuthCredentialsDto } from './dto/auth-credentials.dto';
+import { SignUpCredentialsDto } from './dto/signup-credentials.dto';
 import { User } from './user.entity';
-import { LoginCredentialsDTO } from './dto/login-credentials.dto';
+import { SignInCredentialsDto } from './dto/signin-credentials.dto';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
 
-  public async signUp(authCredentialsDto: AuthCredentialsDto): Promise<User> {
+  public async signUp(signUpCredentialsDto: SignUpCredentialsDto): Promise<User> {
 
-    const { username, password, email, phonenumber, firstname, lastname, dateofbirth, gender,
-      country, city, homeaddress }: AuthCredentialsDto = authCredentialsDto;
+    const { username, password, email, phoneNumber, firstName, lastName, dateOfBirth, gender,
+      country, city, homeAddress }: SignUpCredentialsDto = signUpCredentialsDto;
 
     const user: User = new User();
 
     user.username = username;
     user.email = email;
-    user.phonenumber = phonenumber;
-    user.firstname = firstname;
-    user.lastname = lastname;
-    user.dateofbirth = dateofbirth;
+    user.phoneNumber = phoneNumber;
+    user.firstName = firstName;
+    user.lastName = lastName;
+    user.dateOfBirth = dateOfBirth;
     user.gender = gender;
     user.country = country;
     user.city = city;
-    user.homeaddress = homeaddress;
+    user.homeAddress = homeAddress;
     user.salt = await bcrypt.genSalt();
     user.password = await this.hashPassword(password, user.salt);
 
@@ -49,10 +48,10 @@ export class UserRepository extends Repository<User> {
     return user;
   }
 
-  public async validateUserPassword(loginCredentialsDTO: LoginCredentialsDTO): Promise<User> {
-    const { username, email, phonenumber, password }: LoginCredentialsDTO = loginCredentialsDTO;
+  public async validateUserPassword(signInCredentialsDto: SignInCredentialsDto): Promise<User> {
+    const { username, email, phoneNumber, password }: SignInCredentialsDto = signInCredentialsDto;
 
-    if (!phonenumber && !email) {
+    if (!phoneNumber && !email) {
       const user: User = await this.findOne({ username });
       if (user && await user.validatePassword(password)) {
         delete user.password;
@@ -62,7 +61,7 @@ export class UserRepository extends Repository<User> {
       }
     }
 
-    if (!phonenumber && !username) {
+    if (!phoneNumber && !username) {
       const user: User = await this.findOne({ email });
       if (user && await user.validatePassword(password)) {
         delete user.password;
@@ -73,7 +72,7 @@ export class UserRepository extends Repository<User> {
     }
 
     if (!username && !email) {
-      const user: User = await this.findOne({ phonenumber });
+      const user: User = await this.findOne({ phoneNumber });
       if (user && await user.validatePassword(password)) {
         console.log(user.username);
         delete user.password;

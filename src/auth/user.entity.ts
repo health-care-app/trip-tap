@@ -17,19 +17,19 @@ export class User extends BaseEntity {
   public email: string;
 
   @Column()
-  public phonenumber: string;
+  public phoneNumber: string;
 
   @Column()
   public password: string;
 
   @Column()
-  public firstname: string;
+  public firstName: string;
 
   @Column()
-  public lastname: string;
+  public lastName: string;
 
   @Column('date')
-  public dateofbirth: Date;
+  public dateOfBirth: Date;
 
   @Column({ nullable: true })
   public gender: string;
@@ -41,7 +41,7 @@ export class User extends BaseEntity {
   public city: string;
 
   @Column({ nullable: true })
-  public homeaddress: string;
+  public homeAddress: string;
 
   @Column()
   public salt: string;

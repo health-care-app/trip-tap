@@ -1,10 +1,10 @@
 import { IsString, MinLength, MaxLength, Matches } from "class-validator";
 
-export class LoginCredentialsDTO {
+export class SignInCredentialsDto {
 
     public email: string;
 
-    public phonenumber: string;
+    public phoneNumber: string;
 
     public username: string;
 
