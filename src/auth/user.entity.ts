@@ -5,7 +5,7 @@ import { Trip } from './trip.entity';
 @Entity()
 @Unique(['username'])
 @Unique(['email'])
-@Unique(['phonenumber'])
+@Unique(['phoneNumber'])
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id: number;
