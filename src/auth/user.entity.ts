@@ -34,7 +34,7 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   public gender: string;
 
-  @Column()
+  @Column({ nullable: true })
   public country: string;
 
   @Column({ nullable: true })
