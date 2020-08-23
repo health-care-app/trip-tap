@@ -10,13 +10,13 @@ export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id: number;
 
-  @Column()
+  @Column({ nullable: true })
   public username: string;
 
   @Column()
   public email: string;
 
-  @Column()
+  @Column({ nullable: true })
   public phoneNumber: string;
 
   @Column()
