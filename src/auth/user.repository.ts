@@ -40,6 +40,7 @@ export class UserRepository extends Repository<User> {
           if (error.constraint === 'UQ_c1756d987198666d8b02af03439') {
             throw new ConflictException('Phone Number already exists.');
           }
+          console.log(error);
       throw new InternalServerErrorException();
     }
     delete user.password;
