@@ -1,3 +1,5 @@
+import { User } from "./user.entity";
+
 export interface JwtPayload {
-  username: string;
+  profile: User;
 }

@@ -16,16 +16,16 @@ export class TripsService {
     private readonly tripRepository: TripRepository,
   ) { }
 
-  public async getAllTrips(tuser: User): Promise<Trip[]> {
+  public async getAllTrips(user: User): Promise<Trip[]> {
 
-    return this.tripRepository.getAllTrips(tuser);
+    return this.tripRepository.getAllTrips(user);
   }
 
   public async getTripById(
     id: number,
-    tuser: User,
+    user: User,
   ): Promise<Trip> {
-    const found: Trip = await this.tripRepository.findOne({ where: { id, tuserId: tuser.id } });
+    const found: Trip = await this.tripRepository.findOne({ where: { id, userId: user.id } });
     if (!found) {
       throw new NotFoundException(`Trip with ID ${id} was not found.`);
     }
@@ -35,16 +35,16 @@ export class TripsService {
 
   public async createTrip(
     createTripDto: CreateTripDto,
-    tuser: User,
+    user: User,
   ): Promise<Trip> {
-    return this.tripRepository.createTrip(createTripDto, tuser);
+    return this.tripRepository.createTrip(createTripDto, user);
   }
 
   public async deleteTrip(
     id: number,
-    tuser: User,
+    user: User,
   ): Promise<void> {
-    const result: DeleteResult = await this.tripRepository.delete({ id, tuserId: tuser.id });
+    const result: DeleteResult = await this.tripRepository.delete({ id, userId: user.id });
 
     if (result.affected === 0) {
       throw new NotFoundException(`Trip with ID ${id} was not found.`);

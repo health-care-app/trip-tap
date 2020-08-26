@@ -1,8 +1,8 @@
-import { Body, Controller, Post, Req, UseGuards, ValidationPipe } from '@nestjs/common';
-
+import { Body, Controller, Post, ValidationPipe } from '@nestjs/common';
 import { AccessToken } from '../token/access-token.interface';
 import { AuthService } from './auth.service';
-import { AuthCredentialsDto } from './dto/auth-credentials.dto';
+import { SignUpCredentialsDto } from './dto/signup-credentials.dto';
+import { SignInCredentialsDto } from './dto/signin-credentials.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -11,12 +11,12 @@ export class AuthController {
   ) { }
 
   @Post('/signup')
-  public async signUp(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto): Promise<void> {
-    return this.authService.signUp(authCredentialsDto);
+  public async signUp(@Body(ValidationPipe) signUpCredentialsDto: SignUpCredentialsDto): Promise<AccessToken> {
+    return this.authService.signUp(signUpCredentialsDto);
   }
 
   @Post('signin')
-  public async signIn(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto): Promise<AccessToken> {
-    return this.authService.signIn(authCredentialsDto);
+  public async signIn(@Body(ValidationPipe) signInCredentialsDto: SignInCredentialsDto): Promise<AccessToken> {
+    return this.authService.signIn(signInCredentialsDto);
   }
 }
