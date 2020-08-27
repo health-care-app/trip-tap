@@ -1,18 +1,21 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { TripsController } from './trips.controller';
+import { AuthTripsController } from './auth.trips.controller';
 
+// tslint:disable-next-line: typedef
 describe('Trips Controller', () => {
-  let controller: TripsController;
+  let controller: AuthTripsController;
 
-  beforeEach(async () => {
+  // tslint:disable-next-line: typedef
+  beforeEach(async() => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [TripsController],
+      controllers: [AuthTripsController],
     }).compile();
 
-    controller = module.get<TripsController>(TripsController);
+    controller = module.get<AuthTripsController>(AuthTripsController);
   });
 
+  // tslint:disable-next-line: typedef
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });

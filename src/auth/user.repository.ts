@@ -1,9 +1,11 @@
 import { ConflictException, InternalServerErrorException } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
 import { EntityRepository, Repository } from 'typeorm';
+
+import { SignInCredentialsDto } from './dto/signin-credentials.dto';
 import { SignUpCredentialsDto } from './dto/signup-credentials.dto';
 import { User } from './user.entity';
-import { SignInCredentialsDto } from './dto/signin-credentials.dto';
+
+import * as bcrypt from 'bcrypt';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
@@ -11,7 +13,7 @@ export class UserRepository extends Repository<User> {
   public async signUp(signUpCredentialsDto: SignUpCredentialsDto): Promise<User> {
 
     const { username, password, email, phoneNumber, firstName, lastName, dateOfBirth, gender,
-      country, city, homeAddress }: SignUpCredentialsDto = signUpCredentialsDto;
+            country, city, homeAddress }: SignUpCredentialsDto = signUpCredentialsDto;
 
     const user: User = new User();
 
@@ -33,14 +35,15 @@ export class UserRepository extends Repository<User> {
     } catch (error) {
       if (error.constraint === 'UQ_e12875dfb3b1d92d7d7c5377e22') {
         throw new ConflictException('Email already exists.');
-      } else
-        if (error.constraint === 'UQ_78a916df40e02a9deb1c4b75edb') {
-          throw new ConflictException('Username already exists.');
-        } else
-          if (error.constraint === 'UQ_c1756d987198666d8b02af03439') {
-            throw new ConflictException('Phone Number already exists.');
-          }
-          console.log(error);
+      }
+      if (error.constraint === 'UQ_78a916df40e02a9deb1c4b75edb') {
+        throw new ConflictException('Username already exists.');
+      }
+      if (error.constraint === 'UQ_c1756d987198666d8b02af03439') {
+        throw new ConflictException('Phone Number already exists.');
+      }
+      // tslint:disable-next-line: no-console
+      console.log(error);
       throw new InternalServerErrorException();
     }
     delete user.password;
@@ -75,6 +78,7 @@ export class UserRepository extends Repository<User> {
     if (!username && !email) {
       const user: User = await this.findOne({ phoneNumber });
       if (user && await user.validatePassword(password)) {
+        // tslint:disable-next-line: no-console
         console.log(user.username);
         delete user.password;
         delete user.salt;
@@ -86,6 +90,7 @@ export class UserRepository extends Repository<User> {
     return null;
   }
 
+  // tslint:disable-next-line: prefer-function-over-method
   private async hashPassword(password: string, salt: string): Promise<string> {
     return bcrypt.hash(password, salt);
   }

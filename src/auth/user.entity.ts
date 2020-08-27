@@ -1,6 +1,8 @@
-import * as bcrypt from 'bcrypt';
 import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
+
 import { Trip } from './trip.entity';
+
+import * as bcrypt from 'bcrypt';
 
 @Entity()
 @Unique(['username'])
@@ -28,7 +30,7 @@ export class User extends BaseEntity {
   @Column()
   public lastName: string;
 
-  @Column('date',{ nullable: true })
+  @Column('date', { nullable: true })
   public dateOfBirth: Date;
 
   @Column({ nullable: true })

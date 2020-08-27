@@ -16,9 +16,13 @@ export class TripsService {
     private readonly tripRepository: TripRepository,
   ) { }
 
-  public async getAllTrips(user: User): Promise<Trip[]> {
+  public async authGetAllTrips(user: User): Promise<Trip[]> {
 
-    return this.tripRepository.getAllTrips(user);
+    return this.tripRepository.authGetAllTrips(user);
+  }
+  public async getAllTrips(): Promise<Trip[]> {
+
+    return this.tripRepository.getAllTrips();
   }
 
   public async getTripById(
