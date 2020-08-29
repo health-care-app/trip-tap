@@ -4,7 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TripRepository } from '@Auth/trip.repository';
 
 import { AuthModule } from '../auth/auth.module';
-import { AuthTripsController } from './auth.trips.controller';
+import { AdminController } from './admin.controller';
+import { CustomerTripsController } from './customer.trips.controller';
 import { TripsController } from './trips.controller';
 import { TripsService } from './trips.service';
 
@@ -14,8 +15,9 @@ import { TripsService } from './trips.service';
     TypeOrmModule.forFeature([TripRepository]),
   ],
   controllers: [
-    AuthTripsController,
+    CustomerTripsController,
     TripsController,
+    AdminController,
   ],
   providers: [TripsService],
 })

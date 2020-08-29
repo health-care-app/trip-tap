@@ -13,12 +13,13 @@ export class UserRepository extends Repository<User> {
   public async signUp(signUpCredentialsDto: SignUpCredentialsDto): Promise<User> {
 
     const { username, password, email, phoneNumber, firstName, lastName, dateOfBirth, gender,
-            country, city, homeAddress }: SignUpCredentialsDto = signUpCredentialsDto;
+            country, city, homeAddress, userType }: SignUpCredentialsDto = signUpCredentialsDto;
 
     const user: User = new User();
-
+    user.userType = userType;
     user.username = username;
     user.email = email;
+    user.approved = false;
     user.phoneNumber = phoneNumber;
     user.firstName = firstName;
     user.lastName = lastName;

@@ -1,6 +1,9 @@
-import { IsString, Matches, MaxLength, MinLength, IsEmail, IsOptional } from 'class-validator';
+import { IsEmail, IsOptional, IsString, Matches, MaxLength, MinLength, IsBoolean } from 'class-validator';
 
 export class SignUpCredentialsDto {
+
+  @IsString()
+  public userType: string;
 
   @IsOptional()
   @IsString()
