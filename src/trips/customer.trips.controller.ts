@@ -3,13 +3,13 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards, Us
 import { AuthGuard } from '@nestjs/passport';
 
 import { GetUser } from '@Auth/get-user.decorator';
-import { Trip } from '@Auth/trip.entity';
 
 import { User } from '../auth/user.entity';
+import { Trip } from '../trips/trip.entity';
 import { CreateTripDto } from './dto/create-trip.dto';
 import { TripsService } from './trips.service';
 
-@Controller('auth/trips')
+@Controller('customer/trips')
 @UseGuards(AuthGuard())
 export class CustomerTripsController {
 
@@ -22,5 +22,6 @@ export class CustomerTripsController {
     return this.tripsService.customerGetAllTrips(user);
   }
 
+  
 
 }

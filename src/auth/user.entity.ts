@@ -1,6 +1,6 @@
 import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
-import { Trip } from './trip.entity';
+import { Trip } from '../trips/trip.entity';
 
 import * as bcrypt from 'bcrypt';
 
@@ -54,6 +54,7 @@ export class User extends BaseEntity {
   @Column()
   public salt: string;
 
+  // tslint:disable-next-line: typedef
   @OneToMany(type => Trip, trip => trip.user, { eager: true })
   public trips: Trip[];
 

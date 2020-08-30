@@ -1,13 +1,12 @@
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult } from 'typeorm';
-
-import { Trip } from '@Auth/trip.entity';
-import { TripRepository } from '@Auth/trip.repository';
 
 import { User } from '../auth/user.entity';
+import { UserType } from '../enums/user-type.enum';
+import { Active } from '../models/active.model';
+import { Trip } from '../trips/trip.entity';
+import { TripRepository } from '../trips/trip.repository';
 import { CreateTripDto } from './dto/create-trip.dto';
-import { UserType } from 'src/enums/user-type.enum';
 
 @Injectable()
 export class TripsService {
@@ -22,9 +21,12 @@ export class TripsService {
     return this.tripRepository.customerGetAllTrips(user);
   }
 
-  public async getAllTrips(): Promise<Trip[]> {
+  public async getAllTrips(
+    user: User,
+    active: Active,
+  ): Promise<Trip[]> {
 
-    return this.tripRepository.getAllTrips();
+    return this.tripRepository.getAllTrips(user, active);
   }
 
   public async getTripById(
@@ -39,40 +41,36 @@ export class TripsService {
     return found;
   }
 
-  public async createTrip(
-    createTripDto: CreateTripDto,
-    user: User,
-  ): Promise<Trip> {
-    return this.tripRepository.createTrip(createTripDto, user);
-  }
-
-  public async approveCustomer(
-    id: number,
-    user: User,
-  ): Promise<User> {
-    const approvedUser: User = await this.tripRepository.approveCustomer(id, user);
-
-    return approvedUser;
-  }
-
   public async deleteTrip(
     id: number,
     user: User,
-  ): Promise<void> {
-    const { tripOrganizer } = UserType;
+  ): Promise<Trip> {
 
-    if (user.approved && user.userType === tripOrganizer) {
-      const result: DeleteResult = await this.tripRepository.delete({ id, userId: user.id });
+    if (user.approved && user.userType === UserType.tripOrganizer) {
 
-      if (result.affected === 0) {
-        throw new NotFoundException(`Trip with ID ${id} was not found.`);
+      const trip: Trip = await this.tripRepository.findOne({ where: { id, active: true, userId: user.id } });
+      if (!trip) {
+        throw new NotFoundException(`Trip does not exist.`);
       }
+      await this.tripRepository.createQueryBuilder('trip')
+        .update(Trip)
+        .set({ active: false })
+        .where({ id })
+        .execute();
+
+      return this.tripRepository.findOne({ where: { id } });
+
     }
-    if (!user.approved) {
-      throw new UnauthorizedException('Your account must be approved.');
-    }
-    if (!(user.userType === tripOrganizer)) {
+    if (user.userType !== UserType.tripOrganizer) {
       throw new UnauthorizedException('Only Trip Organizers can delete a trip.');
     }
+    throw new UnauthorizedException('Your account must be approved.');
+  }
+
+  public static async createTrip(
+    createTripDto: CreateTripDto,
+    user: User,
+  ): Promise<Trip> {
+    return TripRepository.createTrip(createTripDto, user);
   }
 }

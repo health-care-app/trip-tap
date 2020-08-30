@@ -1,7 +1,7 @@
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
-import { User } from './user.entity';
-import { CustomerTrip } from './customer-trip.entity';
+import { CustomerTrip } from '../auth/customer-trip.entity';
+import { User } from '../auth/user.entity';
 
 @Entity()
 export class Trip extends BaseEntity {
@@ -11,13 +11,18 @@ export class Trip extends BaseEntity {
   @Column()
   public name: string;
 
+  // tslint:disable-next-line: typedef
   @ManyToOne(type => User, user => user.trips, { eager: false })
   public user: User;
 
   @Column()
   public userId: number;
 
+  // tslint:disable-next-line: typedef
   @OneToMany(type => CustomerTrip, customerTrip => customerTrip.trip, { eager: true })
   public customerTrips: CustomerTrip[];
+
+  @Column()
+  public active: boolean;
 
 }

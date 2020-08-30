@@ -2,8 +2,8 @@ import { IsEmail, IsOptional, IsString, Matches, MaxLength, MinLength, IsBoolean
 
 export class SignUpCredentialsDto {
 
-  @IsString()
-  public userType: string;
+  @IsBoolean()
+  public isTripOrganizer: boolean;
 
   @IsOptional()
   @IsString()
