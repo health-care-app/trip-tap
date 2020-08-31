@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { Approved } from '../models/approved.model';
+import { Params } from '../models/params.model';
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';
 
@@ -21,9 +21,9 @@ export class AdminService {
     }
     public static async getAllTripOrganizers(
         user: User,
-        approved: Approved,
+        params: Params,
     ): Promise<User[]> {
 
-        return UserRepository.getAllTripOrganizers(user, approved);
+        return UserRepository.getAllTripOrganizers(user, params);
     }
 }

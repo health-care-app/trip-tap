@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { User } from '../auth/user.entity';
 import { UserType } from '../enums/user-type.enum';
-import { Active } from '../models/active.model';
+import { Params } from '../models/params.model';
 import { Trip } from '../trips/trip.entity';
 import { TripRepository } from '../trips/trip.repository';
 import { CreateTripDto } from './dto/create-trip.dto';
@@ -23,10 +23,10 @@ export class TripsService {
 
   public async getAllTrips(
     user: User,
-    active: Active,
+    params: Params,
   ): Promise<Trip[]> {
 
-    return this.tripRepository.getAllTrips(user, active);
+    return this.tripRepository.getAllTrips(user, params);
   }
 
   public async getTripById(

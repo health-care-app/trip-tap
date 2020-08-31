@@ -2,7 +2,7 @@ import { ConflictException, InternalServerErrorException, UnauthorizedException 
 import { EntityRepository, getManager, Repository } from 'typeorm';
 
 import { UserType } from '../enums/user-type.enum';
-import { Approved } from '../models/approved.model';
+import { Params } from '../models/params.model';
 import { SignInCredentialsDto } from './dto/signin-credentials.dto';
 import { SignUpCredentialsDto } from './dto/signup-credentials.dto';
 import { User } from './user.entity';
@@ -73,13 +73,13 @@ export class UserRepository extends Repository<User> {
 
   public static async getAllTripOrganizers(
     user: User,
-    approved: Approved,
+    params: Params,
   ): Promise<User[]> {
 
     if (user.userType === UserType.admin) {
       let users: User[];
 
-      if (approved.approved === 'true') {
+      if (params.approved === 'true') {
         users = await getManager()
           .createQueryBuilder(User, 'user')
           .where({ userType: UserType.tripOrganizer, approved: true })
@@ -88,7 +88,7 @@ export class UserRepository extends Repository<User> {
         return users;
       }
 
-      if (approved.approved === 'false') {
+      if (params.approved === 'false') {
         users = await getManager()
           .createQueryBuilder(User, 'user')
           .where({ userType: UserType.tripOrganizer, approved: false })

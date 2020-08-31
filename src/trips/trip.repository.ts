@@ -3,9 +3,9 @@ import { EntityRepository, Repository, SelectQueryBuilder } from 'typeorm';
 
 import { User } from '../auth/user.entity';
 import { UserType } from '../enums/user-type.enum';
+import { Params } from '../models/params.model';
 import { CreateTripDto } from './dto/create-trip.dto';
 import { Trip } from './trip.entity';
-import { Active } from 'src/models/active.model';
 
 @EntityRepository(Trip)
 export class TripRepository extends Repository<Trip>{
@@ -23,7 +23,7 @@ export class TripRepository extends Repository<Trip>{
 
   public async getAllTrips(
     user: User,
-    active: Active,
+    params: Params,
   ): Promise<Trip[]> {
     let query: SelectQueryBuilder<Trip>;
     if (user.userType === UserType.tripOrganizer) {
@@ -35,13 +35,13 @@ export class TripRepository extends Repository<Trip>{
 
       return query.getMany();
     }
-    if (active.active === 'true') {
+    if (params.active === 'true') {
       query = this.createQueryBuilder('trip')
         .where({ active: true });
 
       return query.getMany();
     }
-    if (active.active === 'false') {
+    if (params.active === 'false') {
       query = this.createQueryBuilder('trip')
         .where({ active: false });
 

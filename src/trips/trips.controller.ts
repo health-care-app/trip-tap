@@ -4,7 +4,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from '@Auth/get-user.decorator';
 import { User } from '@Auth/user.entity';
 
-import { Active } from '../models/active.model';
+import { Params } from '../models/params.model';
 import { Trip } from '../trips/trip.entity';
 import { CreateTripDto } from './dto/create-trip.dto';
 import { TripsService } from './trips.service';
@@ -19,10 +19,10 @@ export class TripsController {
     @Get()
     public async getAllTrips(
         @GetUser() user: User,
-        @Query() active: Active,
+        @Query() params: Params,
     ): Promise<Trip[]> {
 
-        return this.tripsService.getAllTrips(user, active);
+        return this.tripsService.getAllTrips(user, params);
     }
 
     @Get('/:id')

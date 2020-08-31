@@ -4,7 +4,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from '@Auth/get-user.decorator';
 import { User } from '@Auth/user.entity';
 
-import { Approved } from '../models/approved.model';
+import { Params } from '../models/params.model';
 import { AdminService } from './admin.service';
 
 @Controller('admin')
@@ -32,10 +32,10 @@ export class AdminController {
     // tslint:disable-next-line: prefer-function-over-method
     public async getAllTripOrganizers(
         @GetUser() user: User,
-        @Query() approved: Approved,
+        @Query() params: Params,
     ): Promise<User[]> {
 
-        return AdminService.getAllTripOrganizers(user, approved);
+        return AdminService.getAllTripOrganizers(user, params);
     }
 
 }
