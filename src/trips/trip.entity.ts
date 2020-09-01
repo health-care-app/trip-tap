@@ -33,5 +33,4 @@ export class Trip extends BaseEntity {
 
   @Column({ nullable: true })
   public date: Date;
-
 }

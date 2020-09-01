@@ -10,14 +10,13 @@ import { CreateTripDto } from './dto/create-trip.dto';
 
 @Injectable()
 export class TripsService {
-  public constructor(
 
+  public constructor(
     @InjectRepository(TripRepository)
     private readonly tripRepository: TripRepository,
   ) { }
 
   public async customerGetAllTrips(user: User): Promise<Trip[]> {
-
     return this.tripRepository.customerGetAllTrips(user);
   }
 
@@ -45,9 +44,7 @@ export class TripsService {
     id: number,
     user: User,
   ): Promise<Trip> {
-
     if (user.approved && user.userType === UserType.tripOrganizer) {
-
       const trip: Trip = await this.tripRepository.findOne({ where: { id, active: true, userId: user.id } });
       if (!trip) {
         throw new NotFoundException(`Trip does not exist.`);
@@ -59,7 +56,6 @@ export class TripsService {
         .execute();
 
       return this.tripRepository.findOne({ where: { id } });
-
     }
     if (user.userType !== UserType.tripOrganizer) {
       throw new UnauthorizedException('Only Trip Organizers can delete a trip.');
