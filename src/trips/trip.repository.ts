@@ -23,6 +23,7 @@ export class TripRepository extends Repository<Trip>{
     params: Params,
   ): Promise<Trip[]> {
     let query: SelectQueryBuilder<Trip>;
+
     if (user.userType === UserType.tripOrganizer) {
       if (!user.approved) {
         throw new UnauthorizedException('Your account must be approved.');

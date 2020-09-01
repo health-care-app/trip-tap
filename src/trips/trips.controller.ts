@@ -12,16 +12,14 @@ import { TripsService } from './trips.service';
 @Controller('trips')
 export class TripsController {
 
-  public constructor(
-    private readonly tripsService: TripsService,
-  ) { }
+  public constructor(private readonly tripsService: TripsService) {
+  }
 
   @Get()
   public async getAllTrips(
     @GetUser() user: User,
     @Query() params: Params,
   ): Promise<Trip[]> {
-
     return this.tripsService.getAllTrips(user, params);
   }
 
@@ -30,7 +28,6 @@ export class TripsController {
     @Param('id', ParseIntPipe) id: number,
     @GetUser() user: User,
   ): Promise<Trip> {
-
     return this.tripsService.getTripById(id, user);
   }
 
@@ -41,7 +38,6 @@ export class TripsController {
     @Body() createTripDto: CreateTripDto,
     @GetUser() user: User,
   ): Promise<Trip> {
-
     return TripsService.createTrip(createTripDto, user);
   }
 
@@ -50,7 +46,6 @@ export class TripsController {
     @Param('id', ParseIntPipe) id: number,
     @GetUser() user: User,
   ): Promise<Trip> {
-
     return this.tripsService.deleteTrip(id, user);
   }
 }

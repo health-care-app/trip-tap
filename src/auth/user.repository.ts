@@ -52,7 +52,6 @@ export class UserRepository extends Repository<User> {
     id: number,
     user: User,
   ): Promise<User> {
-
     if (user.userType === UserType.admin) {
       await this.createQueryBuilder()
         .update(User)
@@ -74,7 +73,6 @@ export class UserRepository extends Repository<User> {
     user: User,
     params: Params,
   ): Promise<User[]> {
-
     if (user.userType === UserType.admin) {
       let users: User[];
 
@@ -134,8 +132,6 @@ export class UserRepository extends Repository<User> {
       if (error.constraint === 'UQ_c1756d987198666d8b02af03439') {
         throw new ConflictException('Phone Number already exists.');
       }
-      // tslint:disable-next-line: no-console
-      console.log(error);
       throw new InternalServerErrorException();
     }
     delete user.password;

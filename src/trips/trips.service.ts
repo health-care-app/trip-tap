@@ -24,7 +24,6 @@ export class TripsService {
     user: User,
     params: Params,
   ): Promise<Trip[]> {
-
     return this.tripRepository.getAllTrips(user, params);
   }
 

@@ -2,12 +2,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 
 import { CustomerTripsController } from './customer.trips.controller';
 
-// tslint:disable-next-line: typedef
-describe('Trips Controller', () => {
+describe('Trips Controller', (): void => {
   let controller: CustomerTripsController;
 
-  // tslint:disable-next-line: typedef
-  beforeEach(async() => {
+  beforeEach(async(): Promise<void> => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [CustomerTripsController],
     }).compile();
@@ -15,8 +13,7 @@ describe('Trips Controller', () => {
     controller = module.get<CustomerTripsController>(CustomerTripsController);
   });
 
-  // tslint:disable-next-line: typedef
-  it('should be defined', () => {
+  it('should be defined', (): void => {
     expect(controller).toBeDefined();
   });
 });

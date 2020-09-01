@@ -14,5 +14,4 @@ export class CreateTripDto {
 
   @IsOptional()
   public date: Date;
-
 }
