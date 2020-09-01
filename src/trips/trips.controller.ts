@@ -12,43 +12,45 @@ import { TripsService } from './trips.service';
 @Controller('trips')
 export class TripsController {
 
-    public constructor(
-        private readonly tripsService: TripsService,
-    ) { }
+  public constructor(
+    private readonly tripsService: TripsService,
+  ) { }
 
-    @Get()
-    public async getAllTrips(
-        @GetUser() user: User,
-        @Query() params: Params,
-    ): Promise<Trip[]> {
+  @Get()
+  public async getAllTrips(
+    @GetUser() user: User,
+    @Query() params: Params,
+  ): Promise<Trip[]> {
 
-        return this.tripsService.getAllTrips(user, params);
-    }
+    return this.tripsService.getAllTrips(user, params);
+  }
 
-    @Get('/:id')
-    public async getTripById(
-        @Param('id', ParseIntPipe) id: number,
-        @GetUser() user: User,
-    ): Promise<Trip> {
+  @Get('/:id')
+  public async getTripById(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() user: User,
+  ): Promise<Trip> {
 
-        return this.tripsService.getTripById(id, user);
-    }
+    return this.tripsService.getTripById(id, user);
+  }
 
-    @Post()
-    @UsePipes(ValidationPipe)
-    // tslint:disable-next-line: prefer-function-over-method
-    public async createTrip(
-        @Body() createTripDto: CreateTripDto,
-        @GetUser() user: User,
-    ): Promise<Trip> {
-        return TripsService.createTrip(createTripDto, user);
-    }
+  @Post()
+  @UsePipes(ValidationPipe)
+  // tslint:disable-next-line: prefer-function-over-method
+  public async createTrip(
+    @Body() createTripDto: CreateTripDto,
+    @GetUser() user: User,
+  ): Promise<Trip> {
 
-    @Delete('/:id')
-    public async deleteTrip(
-        @Param('id', ParseIntPipe) id: number,
-        @GetUser() user: User,
-    ): Promise<Trip> {
-        return this.tripsService.deleteTrip(id, user);
-    }
+    return TripsService.createTrip(createTripDto, user);
+  }
+
+  @Delete('/:id')
+  public async deleteTrip(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() user: User,
+  ): Promise<Trip> {
+
+    return this.tripsService.deleteTrip(id, user);
+  }
 }

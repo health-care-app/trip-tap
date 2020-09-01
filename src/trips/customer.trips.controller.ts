@@ -6,7 +6,6 @@ import { GetUser } from '@Auth/get-user.decorator';
 
 import { User } from '../auth/user.entity';
 import { Trip } from '../trips/trip.entity';
-import { CreateTripDto } from './dto/create-trip.dto';
 import { TripsService } from './trips.service';
 
 @Controller('customer/trips')
@@ -21,7 +20,4 @@ export class CustomerTripsController {
   public async getAllTrips(@GetUser() user: User): Promise<Trip[]> {
     return this.tripsService.customerGetAllTrips(user);
   }
-
-  
-
 }

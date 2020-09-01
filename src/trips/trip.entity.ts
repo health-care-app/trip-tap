@@ -25,4 +25,13 @@ export class Trip extends BaseEntity {
   @Column()
   public active: boolean;
 
+  @Column({ nullable: true })
+  public image: string;
+
+  @Column({ nullable: true })
+  public description: string;
+
+  @Column({ nullable: true })
+  public date: Date;
+
 }

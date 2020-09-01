@@ -11,31 +11,26 @@ import { AdminService } from './admin.service';
 @UseGuards(AuthGuard())
 export class AdminController {
 
-    public constructor(
-        private readonly adminService: AdminService,
+  public constructor(
+    private readonly adminService: AdminService,
+  ) { }
 
-    ) { }
+  @Post('approve/:id')
+  public async approveCustomer(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() user: User,
+  ): Promise<User> {
+    const approvedUser: User = await this.adminService.approveCustomer(id, user);
 
-    @Post('approve/:id')
-    public async approveCustomer(
-        @Param('id', ParseIntPipe) id: number,
-        @GetUser() user: User,
-    ): Promise<User> {
+    return approvedUser;
+  }
 
-        const approvedUser: User = await this.adminService.approveCustomer(id, user);
-
-        return approvedUser;
-    }
-
-    @Get('trip-organizers')
-
-    // tslint:disable-next-line: prefer-function-over-method
-    public async getAllTripOrganizers(
-        @GetUser() user: User,
-        @Query() params: Params,
-    ): Promise<User[]> {
-
-        return AdminService.getAllTripOrganizers(user, params);
-    }
-
+  @Get('trip-organizers')
+  // tslint:disable-next-line: prefer-function-over-method
+  public async getAllTripOrganizers(
+    @GetUser() user: User,
+    @Query() params: Params,
+  ): Promise<User[]> {
+    return AdminService.getAllTripOrganizers(user, params);
+  }
 }

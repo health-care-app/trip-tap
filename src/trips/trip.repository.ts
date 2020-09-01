@@ -56,15 +56,13 @@ export class TripRepository extends Repository<Trip>{
     createTripDto: CreateTripDto,
     user: User,
   ): Promise<Trip> {
-    // tslint:disable-next-line: typedef
-    const { tripOrganizer } = UserType;
-
-    if (user.approved && user.userType === tripOrganizer) {
-      const { name }: CreateTripDto = createTripDto;
-
+    if (user.approved && user.userType === UserType.tripOrganizer) {
       const trip: Trip = new Trip();
+      trip.date = createTripDto.date;
+      trip.image = createTripDto.image;
+      trip.description = createTripDto.description;
       trip.active = true;
-      trip.name = name;
+      trip.name = createTripDto.name;
       trip.user = user;
 
       await trip.save();
@@ -73,7 +71,7 @@ export class TripRepository extends Repository<Trip>{
 
       return trip;
     }
-    if (user.userType !== tripOrganizer) {
+    if (user.userType !== UserType.tripOrganizer) {
       throw new UnauthorizedException('Only Trip Organizers can create a trip.');
     }
     throw new UnauthorizedException('Your account must be approved.');
