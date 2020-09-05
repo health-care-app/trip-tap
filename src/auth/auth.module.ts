@@ -2,14 +2,19 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
+
+import { JwtConfig } from '../models/jwt-config.model';
+import { TripRepository } from '../trips/trip.repository';
+import { AdminController } from './admin.controller';
+import { AdminService } from './admin.service';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
-import { TripRepository } from './trip.repository';
 import { UserRepository } from './user.repository';
+
 import * as config from 'config';
 
-const jwtConfig = config.get('jwt');
+const jwtConfig: JwtConfig = config.get('jwt');
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
@@ -24,8 +29,12 @@ const jwtConfig = config.get('jwt');
       UserRepository,
     ]),
   ],
-  controllers: [AuthController],
+  controllers: [
+    AuthController,
+    AdminController,
+  ],
   providers: [
+    AdminService,
     AuthService,
     JwtStrategy,
   ],

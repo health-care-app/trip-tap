@@ -1,6 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
+
 import { TripsService } from './trips.service';
 
+// tslint:disable-next-line: typedef
 describe('TripsService', () => {
   let service: TripsService;
 

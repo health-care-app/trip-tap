@@ -1,6 +1,8 @@
-import * as bcrypt from 'bcrypt';
 import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
-import { Trip } from './trip.entity';
+
+import { Trip } from '../trips/trip.entity';
+
+import * as bcrypt from 'bcrypt';
 
 @Entity()
 @Unique(['username'])
@@ -10,11 +12,17 @@ export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id: number;
 
+  @Column()
+  public userType: string;
+
   @Column({ nullable: true })
   public username: string;
 
   @Column()
   public email: string;
+
+  @Column()
+  public approved: boolean;
 
   @Column({ nullable: true })
   public phoneNumber: string;
@@ -28,7 +36,7 @@ export class User extends BaseEntity {
   @Column()
   public lastName: string;
 
-  @Column('date',{ nullable: true })
+  @Column('date', { nullable: true })
   public dateOfBirth: Date;
 
   @Column({ nullable: true })
@@ -46,6 +54,7 @@ export class User extends BaseEntity {
   @Column()
   public salt: string;
 
+  // tslint:disable-next-line: typedef
   @OneToMany(type => Trip, trip => trip.user, { eager: true })
   public trips: Trip[];
 
