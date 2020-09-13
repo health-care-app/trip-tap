@@ -31,6 +31,6 @@ export class Trip extends BaseEntity {
   @Column({ nullable: true })
   public description: string;
 
-  @Column({ nullable: true })
-  public date: Date;
+  @Column('timestamp', { nullable: true })
+  public date: Date[];
 }

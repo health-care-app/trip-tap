@@ -13,5 +13,5 @@ export class CreateTripDto {
   public image: string;
 
   @IsOptional()
-  public date: Date;
+  public date: Date[];
 }
