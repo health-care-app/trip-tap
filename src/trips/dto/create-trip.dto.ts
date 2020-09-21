@@ -13,5 +13,9 @@ export class CreateTripDto {
   public image: string;
 
   @IsOptional()
+  @IsString()
+  public comment: string;
+
+  @IsOptional()
   public date: Date[];
 }

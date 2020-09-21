@@ -8,6 +8,8 @@ import * as bcrypt from 'bcrypt';
 @Unique(['username'])
 @Unique(['email'])
 @Unique(['phoneNumber'])
+@Unique(['instagramId'])
+@Unique(['facebookId'])
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id: number;
@@ -29,6 +31,12 @@ export class User extends BaseEntity {
 
   @Column()
   public password: string;
+
+  @Column({ nullable: true })
+  public facebookId: string;
+
+  @Column({ nullable: true })
+  public instagramId: string;
 
   @Column()
   public firstName: string;

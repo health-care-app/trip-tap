@@ -104,8 +104,13 @@ export class UserRepository extends Repository<User> {
 
   public static async signUp(signUpCredentialsDto: SignUpCredentialsDto): Promise<User> {
     const user: User = new User();
-
     user.userType = signUpCredentialsDto.isTripOrganizer ? UserType.tripOrganizer : UserType.customer;
+
+    if (user.userType === UserType.tripOrganizer) {
+      user.facebookId = signUpCredentialsDto.facebookId;
+      user.instagramId = signUpCredentialsDto.instagramId;
+    }
+
     user.username = signUpCredentialsDto.username;
     user.email = signUpCredentialsDto.email;
     user.approved = !signUpCredentialsDto.isTripOrganizer;
@@ -129,8 +134,14 @@ export class UserRepository extends Repository<User> {
       if (error.constraint === 'UQ_78a916df40e02a9deb1c4b75edb') {
         throw new ConflictException('Username already exists.');
       }
-      if (error.constraint === 'UQ_c1756d987198666d8b02af03439') {
+      if (error.constraint === 'UQ_f2578043e491921209f5dadd080') {
         throw new ConflictException('Phone Number already exists.');
+      }
+      if (error.constraint === 'UQ_ee75f13e519d1ed2e9ef89750fd') {
+        throw new ConflictException('Instagram ID already exists.');
+      }
+      if (error.constraint === 'UQ_7989eba4dafdd5322761765f2b8') {
+        throw new ConflictException('facebook ID already exists.');
       }
       throw new InternalServerErrorException();
     }

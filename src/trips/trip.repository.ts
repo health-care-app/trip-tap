@@ -56,6 +56,7 @@ export class TripRepository extends Repository<Trip>{
   ): Promise<Trip> {
     if (user.approved && user.userType === UserType.tripOrganizer) {
       const trip: Trip = new Trip();
+      trip.comment = createTripDto.comment;
       trip.date = createTripDto.date;
       trip.image = createTripDto.image;
       trip.description = createTripDto.description;
