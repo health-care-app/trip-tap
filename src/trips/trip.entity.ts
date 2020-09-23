@@ -2,6 +2,8 @@ import { BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColum
 
 import { CustomerTrip } from '../auth/customer-trip.entity';
 import { User } from '../auth/user.entity';
+import { Currency } from '../enums/currency.enum';
+import { Level } from '../enums/level.enum';
 
 @Entity()
 export class Trip extends BaseEntity {
@@ -32,8 +34,38 @@ export class Trip extends BaseEntity {
   public description: string;
 
   @Column({ nullable: true })
-  public comment: string;
+  public comments: string;
 
-  @Column('timestamp', { nullable: true })
-  public date: Date[];
+  @Column()
+  public location: string;
+
+  @Column()
+  public amenities: string;
+
+  @Column()
+  public material: string;
+
+  @Column()
+  public including: string;
+
+  @Column()
+  public dogFriendly: boolean;
+
+  @Column()
+  public price: number;
+
+  @Column()
+  public currency: Currency;
+
+  @Column()
+  public duration: number;
+
+  @Column()
+  public level: Level;
+
+  @Column('text', { array: true })
+  public availableDates: string[];
+
+  @Column('text', { array: true, nullable: true })
+  public tags: string[];
 }

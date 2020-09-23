@@ -56,8 +56,19 @@ export class TripRepository extends Repository<Trip>{
   ): Promise<Trip> {
     if (user.approved && user.userType === UserType.tripOrganizer) {
       const trip: Trip = new Trip();
-      trip.comment = createTripDto.comment;
-      trip.date = createTripDto.date;
+      trip.material = createTripDto.material;
+      trip.price = createTripDto.price;
+      trip.currency = createTripDto.currency;
+      trip.level = createTripDto.level;
+      trip.including = createTripDto.including;
+      trip.duration = createTripDto.duration;
+      trip.dogFriendly = createTripDto.dogFriendly;
+      trip.amenities = createTripDto.amenities;
+      trip.location = createTripDto.location;
+      trip.availableDates = createTripDto.availableDates;
+      trip.tags = createTripDto.tags;
+      trip.comments = createTripDto.comments;
+      trip.availableDates = createTripDto.availableDates;
       trip.image = createTripDto.image;
       trip.description = createTripDto.description;
       trip.active = true;
