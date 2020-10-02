@@ -1,9 +1,8 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-
 import * as config from 'config';
 
 // tslint:disable-next-line: typedef
-const dbConfig = config.get('db');
+const dbConfig: any = config.get('db');
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
   type: dbConfig.type,
