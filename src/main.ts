@@ -1,11 +1,17 @@
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app.module';
 
-const bootstrap: () => Promise<void> = async(): Promise<void> => {
-  const app: INestApplication = await NestFactory.create(AppModule);
+import * as config from 'config';
 
-  await app.listen(3000);
+const bootstrap: () => Promise<void> = async (): Promise<void> => {
+
+  const serverConfig = config.get('server');
+  const logger = new Logger('bootstrap');
+  const app: INestApplication = await NestFactory.create(AppModule);
+  const port = process.env.PORT || serverConfig.port;
+  await app.listen(port);
+  logger.log(`Application is running on port ${port}`);
 };
 bootstrap();

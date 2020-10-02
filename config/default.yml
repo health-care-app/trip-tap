@@ -1,0 +1,10 @@
+server:
+  port: 3000
+
+db:
+  type: "postgres"
+  port: 5555
+  database: "tripntap"
+
+jwt:
+  expiresIn: 3600
