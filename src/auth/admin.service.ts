@@ -20,7 +20,6 @@ export class AdminService {
 
     return approvedUser;
   }
-
   public static async getAllTripOrganizers(
     user: User,
     params: Params,
