@@ -7,7 +7,9 @@ import { UserRepository } from './user.repository';
 @Injectable()
 export class AdminService {
 
-  public constructor(private readonly userRepository: UserRepository) {
+  public constructor(
+    private readonly userRepository: UserRepository,
+  ) {
   }
 
   public async approveCustomer(
@@ -18,6 +20,7 @@ export class AdminService {
 
     return approvedUser;
   }
+
   public static async getAllTripOrganizers(
     user: User,
     params: Params,

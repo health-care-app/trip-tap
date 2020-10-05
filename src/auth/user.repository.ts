@@ -1,6 +1,7 @@
 import { ConflictException, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { EntityRepository, getManager, Repository } from 'typeorm';
 
+import { ErrorConstraint } from '../enums/constraints.enum';
 import { UserType } from '../enums/user-type.enum';
 import { Params } from '../models/params.model';
 import { SignInCredentialsDto } from './dto/signin-credentials.dto';
@@ -128,19 +129,19 @@ export class UserRepository extends Repository<User> {
     try {
       await user.save();
     } catch (error) {
-      if (error.constraint === 'UQ_e12875dfb3b1d92d7d7c5377e22') {
+      if (error.constraint === ErrorConstraint.emailError) {
         throw new ConflictException('Email already exists.');
       }
-      if (error.constraint === 'UQ_78a916df40e02a9deb1c4b75edb') {
+      if (error.constraint === ErrorConstraint.usernameError) {
         throw new ConflictException('Username already exists.');
       }
-      if (error.constraint === 'UQ_f2578043e491921209f5dadd080') {
+      if (error.constraint === ErrorConstraint.numberError) {
         throw new ConflictException('Phone Number already exists.');
       }
-      if (error.constraint === 'UQ_ee75f13e519d1ed2e9ef89750fd') {
+      if (error.constraint === ErrorConstraint.instagramId) {
         throw new ConflictException('Instagram ID already exists.');
       }
-      if (error.constraint === 'UQ_7989eba4dafdd5322761765f2b8') {
+      if (error.constraint === ErrorConstraint.facebookId) {
         throw new ConflictException('facebook ID already exists.');
       }
       throw new InternalServerErrorException();

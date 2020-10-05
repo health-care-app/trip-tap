@@ -45,6 +45,9 @@ export class Trip extends BaseEntity {
   @Column()
   public material: string;
 
+  @Column('timestamp')
+  public startTime: Date;
+
   @Column()
   public including: string;
 

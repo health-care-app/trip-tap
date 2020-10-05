@@ -27,7 +27,6 @@ export class AuthService {
   }
 
   public async signIn(signInCredentialsDto: SignInCredentialsDto): Promise<AccessToken> {
-
     const user: User = await this.userRepository.validateUserPassword(signInCredentialsDto);
 
     if (!user) {

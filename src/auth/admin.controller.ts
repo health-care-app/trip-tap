@@ -20,9 +20,7 @@ export class AdminController {
     @Param('id', ParseIntPipe) id: number,
     @GetUser() user: User,
   ): Promise<User> {
-    const approvedUser: User = await this.adminService.approveCustomer(id, user);
-
-    return approvedUser;
+    return this.adminService.approveCustomer(id, user);
   }
 
   @Get('trip-organizers')

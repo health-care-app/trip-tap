@@ -57,6 +57,7 @@ export class TripRepository extends Repository<Trip>{
     if (user.approved && user.userType === UserType.tripOrganizer) {
       const trip: Trip = new Trip();
       trip.material = createTripDto.material;
+      trip.startTime = createTripDto.startTime;
       trip.price = createTripDto.price;
       trip.currency = createTripDto.currency;
       trip.level = createTripDto.level;
