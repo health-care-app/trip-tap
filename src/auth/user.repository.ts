@@ -1,6 +1,7 @@
 import { ConflictException, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { EntityRepository, getManager, Repository } from 'typeorm';
 
+import { ErrorConstraint } from '../enums/constraints.enum';
 import { UserType } from '../enums/user-type.enum';
 import { Params } from '../models/params.model';
 import { SignInCredentialsDto } from './dto/signin-credentials.dto';
@@ -104,8 +105,13 @@ export class UserRepository extends Repository<User> {
 
   public static async signUp(signUpCredentialsDto: SignUpCredentialsDto): Promise<User> {
     const user: User = new User();
-
     user.userType = signUpCredentialsDto.isTripOrganizer ? UserType.tripOrganizer : UserType.customer;
+
+    if (user.userType === UserType.tripOrganizer) {
+      user.facebookId = signUpCredentialsDto.facebookId;
+      user.instagramId = signUpCredentialsDto.instagramId;
+    }
+
     user.username = signUpCredentialsDto.username;
     user.email = signUpCredentialsDto.email;
     user.approved = !signUpCredentialsDto.isTripOrganizer;
@@ -123,14 +129,20 @@ export class UserRepository extends Repository<User> {
     try {
       await user.save();
     } catch (error) {
-      if (error.constraint === 'UQ_e12875dfb3b1d92d7d7c5377e22') {
+      if (error.constraint === ErrorConstraint.emailError) {
         throw new ConflictException('Email already exists.');
       }
-      if (error.constraint === 'UQ_78a916df40e02a9deb1c4b75edb') {
+      if (error.constraint === ErrorConstraint.usernameError) {
         throw new ConflictException('Username already exists.');
       }
-      if (error.constraint === 'UQ_c1756d987198666d8b02af03439') {
+      if (error.constraint === ErrorConstraint.numberError) {
         throw new ConflictException('Phone Number already exists.');
+      }
+      if (error.constraint === ErrorConstraint.instagramId) {
+        throw new ConflictException('Instagram ID already exists.');
+      }
+      if (error.constraint === ErrorConstraint.facebookId) {
+        throw new ConflictException('facebook ID already exists.');
       }
       throw new InternalServerErrorException();
     }
