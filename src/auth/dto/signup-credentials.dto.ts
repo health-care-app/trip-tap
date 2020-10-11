@@ -1,4 +1,4 @@
-import { IsEmail, IsOptional, IsString, Matches, MaxLength, MinLength, IsBoolean } from 'class-validator';
+import { IsBoolean, IsEmail, IsOptional, IsString, Matches, MaxLength, MinLength } from 'class-validator';
 
 export class SignUpCredentialsDto {
 
@@ -13,6 +13,14 @@ export class SignUpCredentialsDto {
 
   @IsEmail()
   public email: string;
+
+  @IsOptional()
+  @IsString()
+  public facebookId: string;
+
+  @IsOptional()
+  @IsString()
+  public instagramId: string;
 
   @IsOptional()
   @IsString()
@@ -35,7 +43,7 @@ export class SignUpCredentialsDto {
   public firstName: string;
 
   @IsString()
-  @MinLength(4)
+  @MinLength(3)
   @MaxLength(20)
   public lastName: string;
 

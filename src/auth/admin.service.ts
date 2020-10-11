@@ -7,7 +7,9 @@ import { UserRepository } from './user.repository';
 @Injectable()
 export class AdminService {
 
-  public constructor(private readonly userRepository: UserRepository) {
+  public constructor(
+    private readonly userRepository: UserRepository,
+  ) {
   }
 
   public async approveCustomer(
