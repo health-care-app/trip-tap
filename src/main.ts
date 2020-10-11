@@ -12,6 +12,13 @@ const bootstrap: () => Promise<void> = async (): Promise<void> => {
   const app: INestApplication = await NestFactory.create(AppModule);
   const port: number = Number(process.env.PORT) || serverConfig.port;
 
+  // TODO: Find a better way to manage cors
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
+
   await app.listen(port);
   logger.log(`Application is running on port ${port}`);
 };
