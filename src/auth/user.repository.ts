@@ -1,13 +1,14 @@
+import * as bcrypt from 'bcrypt';
+
 import { ConflictException, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { EntityRepository, getManager, Repository } from 'typeorm';
 
+import { ErrorConstraint } from '../enums/constraints.enum';
 import { UserType } from '../enums/user-type.enum';
 import { Params } from '../models/params.model';
 import { SignInCredentialsDto } from './dto/signin-credentials.dto';
 import { SignUpCredentialsDto } from './dto/signup-credentials.dto';
 import { User } from './user.entity';
-
-import * as bcrypt from 'bcrypt';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
@@ -103,34 +104,33 @@ export class UserRepository extends Repository<User> {
   }
 
   public static async signUp(signUpCredentialsDto: SignUpCredentialsDto): Promise<User> {
-    const user: User = new User();
+    const salt: string = await bcrypt.genSalt();
 
-    user.userType = signUpCredentialsDto.isTripOrganizer ? UserType.tripOrganizer : UserType.customer;
-    user.username = signUpCredentialsDto.username;
-    user.email = signUpCredentialsDto.email;
-    user.approved = !signUpCredentialsDto.isTripOrganizer;
-    user.phoneNumber = signUpCredentialsDto.phoneNumber;
-    user.firstName = signUpCredentialsDto.firstName;
-    user.lastName = signUpCredentialsDto.lastName;
-    user.dateOfBirth = signUpCredentialsDto.dateOfBirth;
-    user.gender = signUpCredentialsDto.gender;
-    user.country = signUpCredentialsDto.country;
-    user.city = signUpCredentialsDto.city;
-    user.homeAddress = signUpCredentialsDto.homeAddress;
-    user.salt = await bcrypt.genSalt();
-    user.password = await UserRepository.hashPassword(signUpCredentialsDto.password, user.salt);
+    const user: User = new User(
+      {
+        ...signUpCredentialsDto,
+        password: await UserRepository.hashPassword(signUpCredentialsDto.password, salt),
+      },
+      salt,
+    );
 
     try {
       await user.save();
     } catch (error) {
-      if (error.constraint === 'UQ_e12875dfb3b1d92d7d7c5377e22') {
+      if (error.constraint === ErrorConstraint.emailError) {
         throw new ConflictException('Email already exists.');
       }
-      if (error.constraint === 'UQ_78a916df40e02a9deb1c4b75edb') {
+      if (error.constraint === ErrorConstraint.usernameError) {
         throw new ConflictException('Username already exists.');
       }
-      if (error.constraint === 'UQ_c1756d987198666d8b02af03439') {
+      if (error.constraint === ErrorConstraint.numberError) {
         throw new ConflictException('Phone Number already exists.');
+      }
+      if (error.constraint === ErrorConstraint.instagramId) {
+        throw new ConflictException('Instagram ID already exists.');
+      }
+      if (error.constraint === ErrorConstraint.facebookId) {
+        throw new ConflictException('facebook ID already exists.');
       }
       throw new InternalServerErrorException();
     }

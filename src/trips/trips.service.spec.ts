@@ -2,11 +2,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 
 import { TripsService } from './trips.service';
 
-// tslint:disable-next-line: typedef
-describe('TripsService', () => {
+describe('TripsService', (): void => {
   let service: TripsService;
 
-  beforeEach(async () => {
+  beforeEach(async(): Promise<void> => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [TripsService],
     }).compile();
@@ -14,7 +13,7 @@ describe('TripsService', () => {
     service = module.get<TripsService>(TripsService);
   });
 
-  it('should be defined', () => {
+  it('should be defined', (): void => {
     expect(service).toBeDefined();
   });
 });
