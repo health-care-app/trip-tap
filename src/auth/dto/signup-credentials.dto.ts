@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { IsBoolean, IsEmail, IsOptional, IsString, Matches, MaxLength, MinLength } from 'class-validator';
-=======
-import { IsEmail, IsOptional, IsString, Matches, MaxLength, MinLength, IsBoolean } from 'class-validator';
->>>>>>> upstream/develop
 
 export class SignUpCredentialsDto {
 

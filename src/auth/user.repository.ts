@@ -1,3 +1,5 @@
+import * as bcrypt from 'bcrypt';
+
 import { ConflictException, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { EntityRepository, getManager, Repository } from 'typeorm';
 
@@ -7,8 +9,6 @@ import { Params } from '../models/params.model';
 import { SignInCredentialsDto } from './dto/signin-credentials.dto';
 import { SignUpCredentialsDto } from './dto/signup-credentials.dto';
 import { User } from './user.entity';
-
-import * as bcrypt from 'bcrypt';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
@@ -104,27 +104,15 @@ export class UserRepository extends Repository<User> {
   }
 
   public static async signUp(signUpCredentialsDto: SignUpCredentialsDto): Promise<User> {
-    const user: User = new User();
-    user.userType = signUpCredentialsDto.isTripOrganizer ? UserType.tripOrganizer : UserType.customer;
+    const salt: string = await bcrypt.genSalt();
 
-    if (user.userType === UserType.tripOrganizer) {
-      user.facebookId = signUpCredentialsDto.facebookId;
-      user.instagramId = signUpCredentialsDto.instagramId;
-    }
-
-    user.username = signUpCredentialsDto.username;
-    user.email = signUpCredentialsDto.email;
-    user.approved = !signUpCredentialsDto.isTripOrganizer;
-    user.phoneNumber = signUpCredentialsDto.phoneNumber;
-    user.firstName = signUpCredentialsDto.firstName;
-    user.lastName = signUpCredentialsDto.lastName;
-    user.dateOfBirth = signUpCredentialsDto.dateOfBirth;
-    user.gender = signUpCredentialsDto.gender;
-    user.country = signUpCredentialsDto.country;
-    user.city = signUpCredentialsDto.city;
-    user.homeAddress = signUpCredentialsDto.homeAddress;
-    user.salt = await bcrypt.genSalt();
-    user.password = await UserRepository.hashPassword(signUpCredentialsDto.password, user.salt);
+    const user: User = new User(
+      {
+        ...signUpCredentialsDto,
+        password: await UserRepository.hashPassword(signUpCredentialsDto.password, salt),
+      },
+      salt,
+    );
 
     try {
       await user.save();
