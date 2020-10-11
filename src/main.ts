@@ -1,7 +1,8 @@
+import * as config from 'config';
+
 import { INestApplication, Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
-import * as config from '../node_modules/config';
 import { AppModule } from './app.module';
 import { ServerConfig } from './models/server-config.model';
 

@@ -1,8 +1,7 @@
 db:
-  host: 'localhost'
-  username: 'postgres'
-  password: 'postgres@!123'
-  synchronize: false
+  port: 5432
+  password: 'postgres'
+  synchronize: true
 
 jwt:
-  secret: 'topSecret51'
+  expiresIn: 86400
