@@ -218,19 +218,24 @@
         "grouped-imports": true,
         "groups": [
           {
-            "name": "External resources",
-            "match": "^(@?(nestjs|rxjs|supertest|typeorm|class-validator))",
+            "name": "Stars resources",
+            "match": "^(@?(bcrypt|config))",
             "order": 10
+          },
+          {
+            "name": "External resources",
+            "match": "^(@?(nestjs|rxjs|supertest|typeorm|class-validator|bcrypt))",
+            "order": 20
           },
           {
             "name": "Internal resources",
             "match": "^@",
-            "order": 20
+            "order": 30
           },
           {
             "name": "Relative resources",
             "match": "^\\.{1,2}\/",
-            "order": 30
+            "order": 40
           }
         ],
         "named-imports-order": "case-insensitive",

@@ -3,8 +3,13 @@ server:
 
 db:
   type: "postgres"
+  host: 'localhost'
   port: 5555
   database: "tripntap"
+  username: 'postgres'
+  password: 'postgres@!123'
+  synchronize: false
 
 jwt:
+  secret: 'topSecret51'
   expiresIn: 3600
