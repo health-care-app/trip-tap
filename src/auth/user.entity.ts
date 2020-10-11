@@ -14,6 +14,10 @@ export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id: number;
 
+  // tslint:disable-next-line: typedef
+  @OneToMany(type => Trip, trip => trip.user, { eager: true })
+  public trips: Trip[];
+
   @Column()
   public userType: string;
 
@@ -62,9 +66,7 @@ export class User extends BaseEntity {
   @Column()
   public salt: string;
 
-  // tslint:disable-next-line: typedef
-  @OneToMany(type => Trip, trip => trip.user, { eager: true })
-  public trips: Trip[];
+  
 
   public async validatePassword(password: string): Promise<boolean> {
     const hash: string = await bcrypt.hash(password, this.salt);

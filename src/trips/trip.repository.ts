@@ -12,7 +12,7 @@ export class TripRepository extends Repository<Trip>{
 
   public async customerGetAllTrips(user: User): Promise<Trip[]> {
     const query: SelectQueryBuilder<Trip> = this.createQueryBuilder('trip');
-    query.where('trip.userId = :userId', { userId: user.id });
+    query.where('trip.userId = :userId', { user: user.id });
     const trips: Trip[] = await query.getMany();
 
     return trips;
@@ -29,7 +29,7 @@ export class TripRepository extends Repository<Trip>{
         throw new UnauthorizedException('Your account must be approved.');
       }
       query = this.createQueryBuilder('trip');
-      query.where('trip.userId = :userId', { userId: user.id });
+      query.where('trip.userId = :userId', { user: user.id });
 
       return query.getMany();
     }

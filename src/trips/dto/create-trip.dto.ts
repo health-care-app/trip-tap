@@ -39,8 +39,8 @@ export class CreateTripDto {
   @IsString()
   public image: string;
 
-  @IsDate()
-  public startTime: Date;
+  @IsString()
+  public startTime: string;
 
   @IsBoolean()
   public dogFriendly: boolean;
