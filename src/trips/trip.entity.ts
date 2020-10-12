@@ -4,9 +4,11 @@ import { CustomerTrip } from '../auth/customer-trip.entity';
 import { User } from '../auth/user.entity';
 import { Currency } from '../enums/currency.enum';
 import { Level } from '../enums/level.enum';
+import { CreateTripDto } from './dto/create-trip.dto';
 
 @Entity()
 export class Trip extends BaseEntity {
+
   @PrimaryGeneratedColumn()
   public id: number;
 
@@ -19,7 +21,6 @@ export class Trip extends BaseEntity {
 
   @Column()
   public name: string;
-
 
   // tslint:disable-next-line: typedef
   @OneToMany(type => CustomerTrip, customerTrip => customerTrip.trip, { eager: true })
@@ -47,7 +48,7 @@ export class Trip extends BaseEntity {
   public material: string;
 
   @Column()
-  public startTime: string;
+  public startTime: number;
 
   @Column()
   public including: string;
@@ -61,15 +62,39 @@ export class Trip extends BaseEntity {
   @Column()
   public currency: Currency;
 
-  @Column()
+  @Column('float')
   public duration: number;
 
   @Column()
   public level: Level;
 
-  @Column('text', { array: true })
-  public availableDates: string[];
+  @Column('integer', { array: true })
+  public availableDates: number[];
 
   @Column('text', { array: true, nullable: true })
   public tags: string[];
+
+  public constructor(createTripDto?: CreateTripDto) {
+    super();
+
+    if (createTripDto) {
+      this.material = createTripDto.material;
+      this.startTime = createTripDto.startTime;
+      this.price = createTripDto.price;
+      this.currency = createTripDto.currency;
+      this.level = createTripDto.level;
+      this.including = createTripDto.including;
+      this.duration = createTripDto.duration;
+      this.dogFriendly = createTripDto.dogFriendly;
+      this.amenities = createTripDto.amenities;
+      this.location = createTripDto.location;
+      this.tags = createTripDto.tags;
+      this.comments = createTripDto.comments;
+      this.availableDates = createTripDto.availableDates;
+      this.image = createTripDto.image;
+      this.description = createTripDto.description;
+      this.active = true;
+      this.name = createTripDto.name;
+    }
+  }
 }

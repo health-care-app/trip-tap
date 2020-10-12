@@ -1,4 +1,4 @@
-import { IsArray, IsBoolean, IsDate, IsNotEmpty, IsNumber, IsOptional, isString, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 import { Currency } from '../../enums/currency.enum';
 import { Level } from '../../enums/level.enum';
@@ -39,8 +39,8 @@ export class CreateTripDto {
   @IsString()
   public image: string;
 
-  @IsString()
-  public startTime: string;
+  @IsNumber()
+  public startTime: number;
 
   @IsBoolean()
   public dogFriendly: boolean;
@@ -49,7 +49,7 @@ export class CreateTripDto {
   @IsString()
   public comments: string;
 
-  public availableDates: string[];
+  public availableDates: number[];
 
   public tags: string[];
 }
