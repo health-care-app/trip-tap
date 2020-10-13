@@ -12,15 +12,15 @@ export class Trip extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id: number;
 
-  @Column()
-  public name: string;
-
   // tslint:disable-next-line: typedef
   @ManyToOne(type => User, user => user.trips, { eager: false })
   public user: User;
 
   @Column()
   public userId: number;
+
+  @Column()
+  public name: string;
 
   // tslint:disable-next-line: typedef
   @OneToMany(type => CustomerTrip, customerTrip => customerTrip.trip, { eager: true })
