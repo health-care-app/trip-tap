@@ -47,7 +47,7 @@ export class Trip extends BaseEntity {
   public material: string;
 
   @Column()
-  public startTime: string;
+  public startTime: number;
 
   @Column()
   public including: string;
