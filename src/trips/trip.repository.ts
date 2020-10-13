@@ -73,6 +73,7 @@ export class TripRepository extends Repository<Trip>{
       delete trip.user.trips;
       delete trip.user.dateOfBirth;
       delete trip.user.country;
+      delete trip.userId;
 
       return trip;
     }
