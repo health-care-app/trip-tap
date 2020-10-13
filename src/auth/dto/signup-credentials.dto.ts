@@ -22,6 +22,7 @@ export class SignUpCredentialsDto {
   @IsString()
   public instagramId: string;
 
+  @IsOptional()
   @IsString()
   @MinLength(8)
   @MaxLength(20)
@@ -42,7 +43,7 @@ export class SignUpCredentialsDto {
   public firstName: string;
 
   @IsString()
-  @MinLength(4)
+  @MinLength(3)
   @MaxLength(20)
   public lastName: string;
 
