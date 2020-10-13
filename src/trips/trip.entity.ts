@@ -22,7 +22,6 @@ export class Trip extends BaseEntity {
   @Column()
   public name: string;
 
-
   // tslint:disable-next-line: typedef
   @OneToMany(type => CustomerTrip, customerTrip => customerTrip.trip, { eager: true })
   public customerTrips: CustomerTrip[];
