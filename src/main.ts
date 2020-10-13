@@ -6,7 +6,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ServerConfig } from './models/server-config.model';
 
-const bootstrap: () => Promise<void> = async (): Promise<void> => {
+const bootstrap: () => Promise<void> = async(): Promise<void> => {
   const serverConfig: ServerConfig = config.get('server');
   const logger: Logger = new Logger('bootstrap');
   const app: INestApplication = await NestFactory.create(AppModule);

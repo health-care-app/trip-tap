@@ -68,8 +68,6 @@ export class User extends BaseEntity {
   @Column()
   public salt: string;
 
-  
-
   public constructor(signUpCredentialsDto?: SignUpCredentialsDto, salt?: string) {
     super();
 

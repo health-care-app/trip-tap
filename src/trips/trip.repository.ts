@@ -12,7 +12,7 @@ export class TripRepository extends Repository<Trip>{
 
   public async customerGetAllTrips(user: User): Promise<Trip[]> {
     const query: SelectQueryBuilder<Trip> = this.createQueryBuilder('trip');
-    query.where('trip.userId = :userId', { user: user.id });
+    query.where('trip.userId = :userId', { userId: user.id });
     const trips: Trip[] = await query.getMany();
 
     return trips;
@@ -29,7 +29,7 @@ export class TripRepository extends Repository<Trip>{
         throw new UnauthorizedException('Your account must be approved.');
       }
       query = this.createQueryBuilder('trip');
-      query.where('trip.userId = :userId', { user: user.id });
+      query.where('trip.userId = :userId', { userId: user.id });
 
       return query.getMany();
     }
@@ -61,7 +61,18 @@ export class TripRepository extends Repository<Trip>{
 
       await trip.save();
 
-      delete trip.user;
+      delete trip.user.password;
+      delete trip.user.username;
+      delete trip.user.gender;
+      delete trip.user.homeAddress;
+      delete trip.user.email;
+      delete trip.user.approved;
+      delete trip.user.userType;
+      delete trip.user.city;
+      delete trip.user.salt;
+      delete trip.user.trips;
+      delete trip.user.dateOfBirth;
+      delete trip.user.country;
 
       return trip;
     }
