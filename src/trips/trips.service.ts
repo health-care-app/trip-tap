@@ -35,6 +35,20 @@ export class TripsService {
     if (!found) {
       throw new NotFoundException(`Trip does not exist.`);
     }
+    found.user = user;
+
+    delete found.user.password;
+    delete found.user.username;
+    delete found.user.gender;
+    delete found.user.homeAddress;
+    delete found.user.email;
+    delete found.user.approved;
+    delete found.user.userType;
+    delete found.user.city;
+    delete found.user.salt;
+    delete found.user.trips;
+    delete found.user.dateOfBirth;
+    delete found.user.country;
 
     return found;
   }

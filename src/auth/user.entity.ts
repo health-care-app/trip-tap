@@ -16,6 +16,10 @@ export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id: number;
 
+  // tslint:disable-next-line: typedef
+  @OneToMany(type => Trip, trip => trip.user, { eager: true })
+  public trips: Trip[];
+
   @Column()
   public userType: string;
 
@@ -64,10 +68,6 @@ export class User extends BaseEntity {
   @Column()
   public salt: string;
 
-  // tslint:disable-next-line: typedef
-  @OneToMany(type => Trip, trip => trip.user, { eager: true })
-  public trips: Trip[];
-
   public constructor(signUpCredentialsDto?: SignUpCredentialsDto, salt?: string) {
     super();
 
@@ -88,8 +88,14 @@ export class User extends BaseEntity {
 
       if (this.userType === UserType.tripOrganizer) {
         this.phoneNumber = signUpCredentialsDto.phoneNumber;
-        this.facebookId = signUpCredentialsDto.facebookId;
-        this.instagramId = signUpCredentialsDto.instagramId;
+
+        if (this.instagramId !== '') {
+          this.instagramId = signUpCredentialsDto.instagramId;
+        }
+
+        if (this.facebookId !== '') {
+          this.facebookId = signUpCredentialsDto.facebookId;
+        }
       }
     }
   }

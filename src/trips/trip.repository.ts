@@ -61,7 +61,19 @@ export class TripRepository extends Repository<Trip>{
 
       await trip.save();
 
-      delete trip.user;
+      delete trip.user.password;
+      delete trip.user.username;
+      delete trip.user.gender;
+      delete trip.user.homeAddress;
+      delete trip.user.email;
+      delete trip.user.approved;
+      delete trip.user.userType;
+      delete trip.user.city;
+      delete trip.user.salt;
+      delete trip.user.trips;
+      delete trip.user.dateOfBirth;
+      delete trip.user.country;
+      delete trip.userId;
 
       return trip;
     }
