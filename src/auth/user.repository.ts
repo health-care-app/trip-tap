@@ -132,8 +132,10 @@ export class UserRepository extends Repository<User> {
       if (error.constraint === ErrorConstraint.facebookId) {
         throw new ConflictException('facebook ID already exists.');
       }
+
       throw new InternalServerErrorException();
     }
+
     delete user.password;
     delete user.salt;
 
