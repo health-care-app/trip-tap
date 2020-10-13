@@ -88,8 +88,14 @@ export class User extends BaseEntity {
 
       if (this.userType === UserType.tripOrganizer) {
         this.phoneNumber = signUpCredentialsDto.phoneNumber;
-        this.facebookId = signUpCredentialsDto.facebookId;
-        this.instagramId = signUpCredentialsDto.instagramId;
+
+        if (this.instagramId !== '') {
+          this.instagramId = signUpCredentialsDto.instagramId;
+        }
+
+        if (this.facebookId !== '') {
+          this.facebookId = signUpCredentialsDto.facebookId;
+        }
       }
     }
   }

@@ -114,6 +114,14 @@ export class UserRepository extends Repository<User> {
       salt,
     );
 
+    if (user.instagramId === '') {
+      delete user.instagramId;
+    }
+
+    if (user.facebookId === '') {
+      delete user.facebookId;
+    }
+
     try {
       await user.save();
     } catch (error) {
@@ -132,6 +140,7 @@ export class UserRepository extends Repository<User> {
       if (error.constraint === ErrorConstraint.facebookId) {
         throw new ConflictException('facebook ID already exists.');
       }
+      console.log(error)
       throw new InternalServerErrorException();
     }
     delete user.password;
