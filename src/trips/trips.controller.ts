@@ -5,21 +5,24 @@ import { GetUser } from '@Auth/get-user.decorator';
 import { User } from '@Auth/user.entity';
 
 import { Params } from '../models/params.model';
-import { Trip } from '../trips/trip.entity';
 import { CreateTripDto } from './dto/create-trip.dto';
+import { TripResponseDto } from './response/trip.dto';
 import { TripsService } from './trips.service';
+
 @UseGuards(AuthGuard())
 @Controller('trips')
 export class TripsController {
 
-  public constructor(private readonly tripsService: TripsService) {
+  public constructor(
+    private readonly tripsService: TripsService,
+  ) {
   }
 
   @Get()
   public async getAllTrips(
     @GetUser() user: User,
     @Query() params: Params,
-  ): Promise<Trip[]> {
+  ): Promise<TripResponseDto[]> {
     return this.tripsService.getAllTrips(user, params);
   }
 
@@ -27,7 +30,7 @@ export class TripsController {
   public async getTripById(
     @Param('id', ParseIntPipe) id: number,
     @GetUser() user: User,
-  ): Promise<Trip> {
+  ): Promise<TripResponseDto> {
     return this.tripsService.getTripById(id, user);
   }
 
@@ -37,15 +40,15 @@ export class TripsController {
   public async createTrip(
     @Body() createTripDto: CreateTripDto,
     @GetUser() user: User,
-  ): Promise<Trip> {
-    return TripsService.createTrip(createTripDto, user);
+  ): Promise<TripResponseDto> {
+    return TripsService.createTrip(user, createTripDto);
   }
 
   @Delete('/:id')
   public async deleteTrip(
     @Param('id', ParseIntPipe) id: number,
     @GetUser() user: User,
-  ): Promise<Trip> {
+  ): Promise<TripResponseDto> {
     return this.tripsService.deleteTrip(id, user);
   }
 }

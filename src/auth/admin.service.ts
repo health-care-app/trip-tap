@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { Params } from '../models/params.model';
+import { UserResponseDto } from './dto/response/user.dto';
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';
 
@@ -15,15 +16,14 @@ export class AdminService {
   public async approveCustomer(
     id: number,
     user: User,
-  ): Promise<User> {
-    const approvedUser: User = await this.userRepository.approveCustomer(id, user);
+  ): Promise<UserResponseDto> {
+    return this.userRepository.approveCustomer(id, user);
 
-    return approvedUser;
   }
-  public static async getAllTripOrganizers(
+  public async getAllTripOrganizers(
     user: User,
     params: Params,
-  ): Promise<User[]> {
-    return UserRepository.getAllTripOrganizers(user, params);
+  ): Promise<UserResponseDto[]> {
+    return this.userRepository.getAllTripOrganizers(user, params);
   }
 }

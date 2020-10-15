@@ -1,5 +1,5 @@
-import { User } from "./user.entity";
+import { UserResponseDto } from './dto/response/user.dto';
 
 export interface JwtPayload {
-  profile: User;
+  profile: UserResponseDto;
 }

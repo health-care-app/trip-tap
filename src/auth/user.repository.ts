@@ -1,11 +1,12 @@
 import * as bcrypt from 'bcrypt';
 
 import { ConflictException, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
-import { EntityRepository, getManager, Repository } from 'typeorm';
+import { EntityRepository, getManager, Repository, UpdateResult } from 'typeorm';
 
 import { ErrorConstraint } from '../enums/constraints.enum';
 import { UserType } from '../enums/user-type.enum';
 import { Params } from '../models/params.model';
+import { UserResponseDto } from './dto/response/user.dto';
 import { SignInCredentialsDto } from './dto/signin-credentials.dto';
 import { SignUpCredentialsDto } from './dto/signup-credentials.dto';
 import { User } from './user.entity';
@@ -13,37 +14,26 @@ import { User } from './user.entity';
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
 
-  public async validateUserPassword(signInCredentialsDto: SignInCredentialsDto): Promise<User> {
+  public async validateUserPassword(signInCredentialsDto: SignInCredentialsDto): Promise<UserResponseDto> {
+    let userCredentials: Partial<User> = {};
     const { username, email, phoneNumber, password }: SignInCredentialsDto = signInCredentialsDto;
 
     if (!phoneNumber && !email) {
-      const user: User = await this.findOne({ username });
-      if (user && await user.validatePassword(password)) {
-        delete user.password;
-        delete user.salt;
-
-        return user;
-      }
+      userCredentials = { username };
     }
 
     if (!phoneNumber && !username) {
-      const user: User = await this.findOne({ email });
-      if (user && await user.validatePassword(password)) {
-        delete user.password;
-        delete user.salt;
-
-        return user;
-      }
+      userCredentials = { email };
     }
 
     if (!username && !email) {
-      const user: User = await this.findOne({ phoneNumber });
-      if (user && await user.validatePassword(password)) {
-        delete user.password;
-        delete user.salt;
+      userCredentials = { phoneNumber };
+    }
 
-        return user;
-      }
+    const user: User = await this.findOne(userCredentials);
+
+    if (user && await user.validatePassword(password)) {
+      return new UserResponseDto(user);
     }
 
     return null;
@@ -52,58 +42,51 @@ export class UserRepository extends Repository<User> {
   public async approveCustomer(
     id: number,
     user: User,
-  ): Promise<User> {
+  ): Promise<UserResponseDto> {
     if (user.userType === UserType.admin) {
-      await this.createQueryBuilder()
+      const updateResult: UpdateResult = await this.createQueryBuilder()
         .update(User)
         .set({ approved: true })
         .where({ id })
         .execute();
 
-      const approvedUser: User = await getManager()
-        .createQueryBuilder(User, 'user')
-        .where({ id })
-        .getOne();
+      if (updateResult.affected === 1) {
+        user.approved = true;
 
-      return approvedUser;
+        return new UserResponseDto(user);
+      }
+
+      throw new InternalServerErrorException();
     }
+
     throw new UnauthorizedException('Only Admins can approve a user.');
   }
 
-  public static async getAllTripOrganizers(
+  public async getAllTripOrganizers(
     user: User,
     params: Params,
-  ): Promise<User[]> {
+  ): Promise<UserResponseDto[]> {
     if (user.userType === UserType.admin) {
       let users: User[];
 
-      if (params.approved === 'true') {
-        users = await getManager()
-          .createQueryBuilder(User, 'user')
-          .where({ userType: UserType.tripOrganizer, approved: true })
-          .getMany();
-
-        return users;
+      switch (params.approved) {
+        case 'true':
+          users = await this.find({ where: { userType: UserType.tripOrganizer, approved: true } });
+          break;
+        case 'false':
+          users = await this.find({ where: { userType: UserType.tripOrganizer, approved: false } });
+          break;
+        default:
+          users = await this.find({ where: { userType: UserType.tripOrganizer } });
       }
 
-      if (params.approved === 'false') {
-        users = await getManager()
-          .createQueryBuilder(User, 'user')
-          .where({ userType: UserType.tripOrganizer, approved: false })
-          .getMany();
-
-        return users;
-      }
-      users = await getManager()
-        .createQueryBuilder(User, 'user')
-        .getMany();
-
-      return users;
+      return users.map((fetchedUser: User): UserResponseDto => new UserResponseDto(fetchedUser));
     }
+
     throw new UnauthorizedException('Only admins can get users information.');
   }
 
-  public static async signUp(signUpCredentialsDto: SignUpCredentialsDto): Promise<User> {
+  public static async signUp(signUpCredentialsDto: SignUpCredentialsDto): Promise<UserResponseDto> {
     const salt: string = await bcrypt.genSalt();
 
     const user: User = new User(
@@ -136,10 +119,7 @@ export class UserRepository extends Repository<User> {
       throw new InternalServerErrorException();
     }
 
-    delete user.password;
-    delete user.salt;
-
-    return user;
+    return new UserResponseDto(user);
   }
 
   private static async hashPassword(password: string, salt: string): Promise<string> {
