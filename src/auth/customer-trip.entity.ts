@@ -8,7 +8,7 @@ export class CustomerTrip extends BaseEntity {
   public id: number;
 
   // tslint:disable-next-line: typedef
-  @ManyToOne(type => Trip, trip => trip.customerTrips, { eager: false })
+  @ManyToOne(type => Trip, trip => trip.customerTrips, { eager: true })
   public trip: Trip;
 
   @Column()
