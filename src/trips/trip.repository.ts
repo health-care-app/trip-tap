@@ -1,5 +1,5 @@
-import { UnauthorizedException } from '@nestjs/common';
-import { EntityRepository, Repository, SelectQueryBuilder } from 'typeorm';
+import { NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { EntityRepository, Repository } from 'typeorm';
 
 import { User } from '../auth/user.entity';
 import { UserType } from '../enums/user-type.enum';
@@ -11,12 +11,11 @@ import { Trip } from './trip.entity';
 @EntityRepository(Trip)
 export class TripRepository extends Repository<Trip>{
 
-  public async customerGetAllTrips(user: User): Promise<Trip[]> {
-    const query: SelectQueryBuilder<Trip> = this.createQueryBuilder('trip');
-    query.where('trip.userId = :userId', { userId: user.id });
-    const trips: Trip[] = await query.getMany();
+  // TODO: Refactor, move to own repository
+  public async customerGetAllTrips(user: User): Promise<TripResponseDto[]> {
+    const trips: Trip[] = await this.find({ where: { userId: user.id } });
 
-    return trips;
+    return trips.map((trip: Trip): TripResponseDto => new TripResponseDto(trip));
   }
 
   public async getAllTrips(
@@ -47,22 +46,55 @@ export class TripRepository extends Repository<Trip>{
     return trips.map((trip: Trip): TripResponseDto => new TripResponseDto(trip));
   }
 
-  public static async createTrip(
-    user: User,
+  public async getTripById(
+    id: number,
+  ): Promise<TripResponseDto> {
+    const trip: Trip = await this.findOne({ where: { id } });
+
+    if (!trip) {
+      throw new NotFoundException(`Trip does not exist.`);
+    }
+
+    return new TripResponseDto(trip);
+  }
+
+  public async createTrip(
     createTripDto: CreateTripDto,
+    user: User,
   ): Promise<TripResponseDto> {
     if (user.approved && user.userType === UserType.tripOrganizer) {
       const trip: Trip = new Trip(createTripDto, user.id);
 
-      trip.user = user;
+      await this.save(trip);
 
-      await trip.save();
-
-      return new TripResponseDto(trip);
+      return new TripResponseDto({ ...trip, user });
     }
 
     if (user.userType !== UserType.tripOrganizer) {
       throw new UnauthorizedException('Only Trip Organizers can create a trip.');
+    }
+
+    throw new UnauthorizedException('Your account must be approved.');
+  }
+
+  public async deleteTrip(
+    id: number,
+    user: User,
+  ): Promise<void> {
+    if (user.approved && user.userType === UserType.tripOrganizer) {
+      const trip: Trip = await this.findOne({ where: { id, active: true, userId: user.id } });
+
+      if (!trip) {
+        throw new NotFoundException('Trip does not exist.');
+      }
+
+      await this.update(trip.id, { active: false });
+
+      return;
+    }
+
+    if (user.userType !== UserType.tripOrganizer) {
+      throw new UnauthorizedException('Only Trip Organizers can delete a trip.');
     }
 
     throw new UnauthorizedException('Your account must be approved.');

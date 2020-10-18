@@ -1,4 +1,17 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Query, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
 import { GetUser } from '@Auth/get-user.decorator';
@@ -29,26 +42,25 @@ export class TripsController {
   @Get('/:id')
   public async getTripById(
     @Param('id', ParseIntPipe) id: number,
-    @GetUser() user: User,
   ): Promise<TripResponseDto> {
-    return this.tripsService.getTripById(id, user);
+    return this.tripsService.getTripById(id);
   }
 
   @Post()
   @UsePipes(ValidationPipe)
-  // tslint:disable-next-line: prefer-function-over-method
   public async createTrip(
     @Body() createTripDto: CreateTripDto,
     @GetUser() user: User,
   ): Promise<TripResponseDto> {
-    return TripsService.createTrip(user, createTripDto);
+    return this.tripsService.createTrip(user, createTripDto);
   }
 
   @Delete('/:id')
+  @HttpCode(204)
   public async deleteTrip(
     @Param('id', ParseIntPipe) id: number,
     @GetUser() user: User,
-  ): Promise<TripResponseDto> {
+  ): Promise<void> {
     return this.tripsService.deleteTrip(id, user);
   }
 }

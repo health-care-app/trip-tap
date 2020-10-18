@@ -1,8 +1,7 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { User } from '../auth/user.entity';
-import { UserType } from '../enums/user-type.enum';
 import { Params } from '../models/params.model';
 import { Trip } from '../trips/trip.entity';
 import { TripRepository } from '../trips/trip.repository';
@@ -18,7 +17,7 @@ export class TripsService {
   ) {
   }
 
-  public async customerGetAllTrips(user: User): Promise<Trip[]> {
+  public async customerGetAllTrips(user: User): Promise<TripResponseDto[]> {
     return this.tripRepository.customerGetAllTrips(user);
   }
 
@@ -31,48 +30,21 @@ export class TripsService {
 
   public async getTripById(
     id: number,
-    user: User,
   ): Promise<TripResponseDto> {
-    const trip: Trip = await this.tripRepository.findOne({ where: { id } });
-
-    if (!trip) {
-      throw new NotFoundException(`Trip does not exist.`);
-    }
-
-    return new TripResponseDto(trip);
+    return this.tripRepository.getTripById(id);
   }
 
   public async deleteTrip(
     id: number,
     user: User,
-  ): Promise<TripResponseDto> {
-    if (user.approved && user.userType === UserType.tripOrganizer) {
-      const trip: Trip = await this.tripRepository.findOne({ where: { id, active: true, userId: user.id } });
-
-      if (!trip) {
-        throw new NotFoundException('Trip does not exist.');
-      }
-
-      await this.tripRepository.createQueryBuilder('trip')
-        .update(Trip)
-        .set({ active: false })
-        .where({ id })
-        .execute();
-
-      return new TripResponseDto(await this.tripRepository.findOne({ where: { id } }));
-    }
-
-    if (user.userType !== UserType.tripOrganizer) {
-      throw new UnauthorizedException('Only Trip Organizers can delete a trip.');
-    }
-
-    throw new UnauthorizedException('Your account must be approved.');
+  ): Promise<void> {
+    return this.tripRepository.deleteTrip(id, user);
   }
 
-  public static async createTrip(
+  public async createTrip(
     user: User,
     createTripDto: CreateTripDto,
   ): Promise<TripResponseDto> {
-    return TripRepository.createTrip(user, createTripDto);
+    return this.tripRepository.createTrip(createTripDto, user);
   }
 }

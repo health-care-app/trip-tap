@@ -32,7 +32,7 @@ export class TripResponseDto {
   public active: boolean;
   public user: TripUser;
 
-  public constructor(trip: Trip) {
+  public constructor(trip: Partial<Trip>) {
     this.id = trip.id;
     this.name = trip.name;
     this.image = trip.image;
