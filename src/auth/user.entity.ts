@@ -17,7 +17,7 @@ export class User extends BaseEntity {
   public id: number;
 
   // tslint:disable-next-line: typedef
-  @OneToMany(type => Trip, trip => trip.user, { eager: true })
+  @OneToMany(type => Trip, trip => trip.user, { eager: false })
   public trips: Trip[];
 
   @Column()
@@ -72,6 +72,9 @@ export class User extends BaseEntity {
     super();
 
     if (signUpCredentialsDto) {
+      const userType: UserType = signUpCredentialsDto.isTripOrganizer ? UserType.tripOrganizer : UserType.customer;
+      const isTripOrganizer: boolean = userType === UserType.tripOrganizer;
+
       this.username = signUpCredentialsDto.username;
       this.email = signUpCredentialsDto.email;
       this.approved = !signUpCredentialsDto.isTripOrganizer;
@@ -84,19 +87,10 @@ export class User extends BaseEntity {
       this.homeAddress = signUpCredentialsDto.homeAddress;
       this.salt = salt;
       this.password = signUpCredentialsDto.password;
-      this.userType = signUpCredentialsDto.isTripOrganizer ? UserType.tripOrganizer : UserType.customer;
-
-      if (this.userType === UserType.tripOrganizer) {
-        this.phoneNumber = signUpCredentialsDto.phoneNumber;
-
-        if (this.instagramId !== '') {
-          this.instagramId = signUpCredentialsDto.instagramId;
-        }
-
-        if (this.facebookId !== '') {
-          this.facebookId = signUpCredentialsDto.facebookId;
-        }
-      }
+      this.userType = userType;
+      this.phoneNumber = isTripOrganizer && signUpCredentialsDto.phoneNumber || null;
+      this.instagramId = isTripOrganizer && signUpCredentialsDto.instagramId || null;
+      this.facebookId = isTripOrganizer && signUpCredentialsDto.facebookId || null;
     }
   }
 

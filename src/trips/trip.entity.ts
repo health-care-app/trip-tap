@@ -13,7 +13,7 @@ export class Trip extends BaseEntity {
   public id: number;
 
   // tslint:disable-next-line: typedef
-  @ManyToOne(type => User, user => user.trips, { eager: false })
+  @ManyToOne(type => User, user => user.trips, { eager: true })
   public user: User;
 
   @Column()
@@ -23,7 +23,7 @@ export class Trip extends BaseEntity {
   public name: string;
 
   // tslint:disable-next-line: typedef
-  @OneToMany(type => CustomerTrip, customerTrip => customerTrip.trip, { eager: true })
+  @OneToMany(type => CustomerTrip, customerTrip => customerTrip.trip, { eager: false })
   public customerTrips: CustomerTrip[];
 
   @Column()
@@ -74,27 +74,28 @@ export class Trip extends BaseEntity {
   @Column('text', { array: true, nullable: true })
   public tags: string[];
 
-  public constructor(createTripDto?: CreateTripDto) {
+  public constructor(createTripDto?: CreateTripDto, userId?: number) {
     super();
 
     if (createTripDto) {
-      this.material = createTripDto.material;
-      this.startTime = createTripDto.startTime;
-      this.price = createTripDto.price;
-      this.currency = createTripDto.currency;
-      this.level = createTripDto.level;
-      this.including = createTripDto.including;
-      this.duration = createTripDto.duration;
-      this.dogFriendly = createTripDto.dogFriendly;
-      this.amenities = createTripDto.amenities;
-      this.location = createTripDto.location;
-      this.tags = createTripDto.tags;
-      this.comments = createTripDto.comments;
-      this.availableDates = createTripDto.availableDates;
+      this.userId = userId;
+      this.name = createTripDto.name;
+      this.active = true;
       this.image = createTripDto.image;
       this.description = createTripDto.description;
-      this.active = true;
-      this.name = createTripDto.name;
+      this.comments = createTripDto.comments;
+      this.location = createTripDto.location;
+      this.amenities = createTripDto.amenities;
+      this.material = createTripDto.material;
+      this.startTime = createTripDto.startTime;
+      this.including = createTripDto.including;
+      this.dogFriendly = createTripDto.dogFriendly;
+      this.price = createTripDto.price;
+      this.currency = createTripDto.currency;
+      this.duration = createTripDto.duration;
+      this.level = createTripDto.level;
+      this.availableDates = createTripDto.availableDates;
+      this.tags = createTripDto.tags;
     }
   }
 }
